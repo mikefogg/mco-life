@@ -1,0 +1,270 @@
+.supply-demand-page
+	.section.top
+		h1
+			strong Six months
+			| after token lockup begins I predict the value of
+			strong $MCO
+			| to be
+			strong $1,102
+			| based solely on token lockup.
+
+	.section.explaination
+		h2#breakdownoverview How we got it
+		
+		p.statement First, we find the total amount of reservations in the last 30 days by tracking it daily
+		p.answer 19,646
+		
+		p.statement By comparing the last 30 days with the 30 days prior we can find the monthly growth rate
+		p.answer 188%
+		
+		p.statement We’ll stay conservative and assume we maintain this same rate for the first 6 months but lets be honest… the growth rate will speed up when they start marketing. Nevertheless, we use that to find the estimated reservations in each of the next 6 months
+		p.answer
+			| Last 30: 
+			strong 19,646
+			| End of Month 1: 
+			strong 36,934
+			| End of Month 2: 
+			strong 69,437
+			| End of Month 3: 
+			strong 130,451
+			| End of Month 4: 
+			strong 245,418
+			| End of Month 5: 
+			strong 461,385
+			| End of Month 6: 
+			strong 867,404
+
+		p.statement That’s crazy. In the spirit of being extremely conservative still, let’s assume that growth gets slowed down by card manufacturing limitations, launching in various global regions at different times, etc. We’re going to only use strong 75% of our current growth rate
+		p.answer
+			| Last 30: 
+			strong 19,646
+			| End of Month 1: 
+			strong 27, 701
+			| End of Month 2: 
+			strong 39,058
+			| End of Month 3: 
+			strong 55,072
+			| End of Month 4: 
+			strong 77,652
+			| End of Month 5: 
+			strong 109,489
+			| End of Month 6: 
+			strong 154,379
+		
+		p.statement
+			| We then have to find out how many token lockups that is. We head over to 
+			a(href='https://etherscan.io/token/Monaco#balances') EtherScan
+			|  and figure out how many people 
+			em can
+			|  afford each of the various card levels (0, 50, 500, and 50,000 tokens)… this was annoying
+		p.answer
+			| Midnight Blue (0 MCO): 
+			strong 65.82%
+			| Ruby Steel (50 MCO): 
+			strong 24.88%
+			| Rose Gold / Space Gray (500 MCO): 
+			strong 9.13%
+			| Obsidian Black (50,000 MCO): 
+			strong 0.18%
+		
+		p.statement
+			| Those numbers match up perfectly with the reservation count infographic Monaco provided last year when we were around 30k reservations. Awesome, so now we can use those numbers (and our current total reservation count of strong 53,761) to determine an estimated number of people who have reserved cards at each level
+		p.answer
+			| Midnight Blue (0 MCO): 
+			strong 35,385
+			| Ruby Steel (50 MCO): 
+			strong 13,376
+			| Rose Gold / Space Gray (500 MCO): 
+			strong 4,908
+			| Obsidian Black (50,000 MCO): 
+			strong 97
+		
+		p.statement For the purpose of this exercise, we’re going to exclude Obsidian Black from here on out. We don’t want to skew our results with those crazy MCO reservation numbers, and honestly, we don’t know how many of those are even left to reserve.
+		
+		p.statement
+			| Still, let’s be even more conservative. Let’s assume that 
+			strong 50%
+			|  of the people who have over 500 tokens still only go with the Ruby card. That gives us
+		p.answer
+			| Midnight Blue (0 MCO): 
+			strong 35,385
+			| Ruby Steel (50 MCO): 
+			strong 15,830
+			| Rose Gold / Space Gray (500 MCO): 
+			strong 2,454
+		
+		p.statement We now have an estimated current token lockup of
+		p.answer
+			| Ruby Steel (50 MCO): 
+			strong 791,496
+			| Rose Gold / Space Gray (500 MCO): 
+			strong 1,227,000
+		
+		p.statement Great, so we now have a total estimated MCO lockup of
+		p.answer
+			strong 2,018,591
+		
+		p.statement And we haven’t even started marketing!
+		
+		p.statement Anyways, so now we can use the previous numbers we have for reservations for the next 6 months, apply the same logic as above, then add them to our pre-lockup count
+		p.answer
+			| Pre-Lockup: 
+			strong 2,018,591
+			| After Month 1: 
+			strong 3,627,734
+			| After Month 2: 
+			strong 5,896,626
+			| After Month 3: 
+			strong 9,095,763
+			| After Month 4: 
+			strong 13,606,546
+			| After Month 5: 
+			strong 19,966,751
+			| After Month 6: 
+			strong 28,934,639
+		
+		p.statement I know… I know, that’s crazy, there are only 13,000,000 MCO in circulation! We’re going to fix up a few things but I wanted to show you those numbers first :)
+		
+		p.statement We’re going to be conservative and assume three things that will reduce those lockup numbers:
+		p.answer
+			ul
+				li Over time users won’t be able to afford the premium cards and will eventually favor the Free & 50 MCO cards
+				li After 3 months of learning how registrations by card type are growing Monaco will decide to use Dynamic Pricing (reducing the amount of tokens required) on all cards, so the number of cards per token will be reduced monthly
+				li Monaco will release MCO from their pool each month for various campaigns, payments, etc. I’m estimating 2.5%/mo for this (~400k/mo)
+		
+		p.statement So lets implement those!
+		
+		p.statement First we’ll have users favor the Free & 50 Token cards by moving people’s preferences from the higher priced cards to the lower priced cards over time
+		p.answer
+			| Pre-Lockup: 
+			strong 2,018,450
+			| End of Month 1: 
+			strong 3,337,614
+			| End of Month 2: 
+			strong 5,224,948
+			| End of Month 3: 
+			strong 7,915,182
+			| End of Month 4: 
+			strong 11,739,180
+			| End of Month 5: 
+			strong 17,163,551
+			| End of Month 6: 
+			strong 24,846,322
+
+		p.statement Now we need to account for Dynamic Pricing on all of the cards so they don’t get crazy expensive by assuming that after 2 months of data collection and learning they keep the USD price per card about the same each month (this came out to about a 40% monthly reduction in tokens per card)
+		p.answer
+			| Pre-Lockup: 
+			strong 2,018,450
+			| End of Month 1: 
+			strong 3,337,614
+			| End of Month 2: 
+			strong 5,224,948
+			| End of Month 3: 
+			strong 6,839,088
+			| End of Month 4: 
+			strong 8,215,727
+			| End of Month 5: 
+			strong 9,387,392
+			| End of Month 6: 
+			strong 10,383,079
+		
+		p.statement And there we have it! Estimated token lockup after month 6
+		p.answer 10,383,079
+		
+		p.statement Boom.
+		
+		p.statement Ok, now we need to get to price. The fun part!
+		
+		p.statement The total tokens in circulation is
+		p.answer 13,085,54
+		
+		p.statement The tokens available (using our lockup amounts above)
+		p.answer
+			| Pre-Lockup: 
+			strong 13,085,54
+			| End of Month 1: 
+			strong 9,747,928
+			| End of Month 2: 
+			strong 7,860,594
+			| End of Month 3: 
+			strong 6,246,454
+			| End of Month 4: 
+			strong 4,869,815
+			| End of Month 5: 
+			strong 3,698,150
+			| End of Month 6: 
+			strong 2,702,463
+		
+		p.statement Each month the price of the token will go up because we’ll have a higher demand and a lower number of tokens available for lockup.
+
+		p.statement Right now it looks like this:
+		p.answer
+			| Current Price: 
+			strong $15.44
+			| Current Market Cap: 
+			strong $202,040,768.48
+
+		p.statement Based on those numbers at the end of month 1 the price of a token with our new limited availability of tokens would be
+		p.answer $20.73
+
+		p.statement which puts our new market cap after month 1 at
+		p.answer $271,217,938.60
+		
+		p.statement and when we do out the rest of our 6 months we get
+		p.answer
+			| Pre-Lockup: 
+			strong $202,040,768.48
+			| End of Month 1: 
+			strong $271,217,938.60
+			| End of Month 2: 
+			strong $451,496,875.95
+			| End of Month 3: 
+			strong $945,829,712.94
+			| End of Month 4: 
+			strong $2,541,512,495.96
+			| End of Month 5: 
+			strong $2,541,512,495.96
+			| End of Month 6: 
+			strong $43,544,304,307.72
+		
+		p.statement and prices of
+		p.answer
+			| Pre-Lockup: 
+			strong $15.44
+			| End of Month 1: 
+			strong $20.73
+			| End of Month 2: 
+			strong $34.50
+			| End of Month 3: 
+			strong $72.28
+			| End of Month 4: 
+			strong $194.22
+			| End of Month 5: 
+			strong $687.24
+			| End of Month 6: 
+			strong $3,327.67
+
+		p.statement One thing we haven’t taken into consideration yet (the last thing!) is that more tokens may be released into circulation each month.
+		
+		p.statement Because we love being conservative, let’s assume that number (based on recent months) is around 2.5% (~400k) every month so our final prices look like (drumroll…….)
+		p.answer
+			| Pre-Lockup: 
+			strong $15.44
+			| End of Month 1: 
+			strong $20.05
+			| End of Month 2: 
+			strong $31.56
+			| End of Month 3: 
+			strong $59.82
+			| End of Month 4: 
+			strong $135.35
+			| End of Month 5: 
+			strong $360.85
+			| End of Month 6: 
+			strong $1,114.83
+		
+		p.statement Giving us the price we were looking for!
+		
+		p.statement 6 Months from token launch, not including FOMO and new features, I predict the token price to be
+		
+		h2 $1,114.83

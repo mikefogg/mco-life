@@ -1,0 +1,10 @@
+.registrations-page
+	.section.top
+		h1
+			| As of
+			strong {{recentData.reservations.last.date}}
+			| we've averaged
+			strong {{formatNumeral(recentData.reservations.thirtyDayAverage)}}
+			| reservations per day in the last thirty days! That's
+			strong {{formatNumeral(recentData.reservations.total)}}
+			| total. Crazy.
