@@ -1,6 +1,8 @@
 <template src='./registrations.pug' lang='pug'></template>
 
 <script>
+// Partials
+import Navigation from '@/components/elements/partials/navigation'
 // Data
 import RecentData from '@/components/data/recent'
 // Helpers
@@ -17,6 +19,9 @@ export default {
 		recentData: () => {
 			return RecentData
 		}
+	},
+	components: {
+		'navigation': Navigation
 	},
 	methods: {
 		formatNumeral: (number) => {
