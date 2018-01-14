@@ -23,7 +23,15 @@ export default {
 		breakdown: Cards.breakdown(),
 		lockup: {
 			basic: Cards.lockup(),
-			conservative: Cards.lockup(true)
+			conservative: Cards.lockup(true),
+			dynamic: Cards.lockup(true, true)
+		}
+	},
+	tokens: {
+		circulation: Cards.tokensInCirculation(),
+		monthlyPrices: {
+			static: Cards.monthlyPrices(),
+			addedCirculation: Cards.monthlyPrices(true)
 		}
 	},
 	daily: {}

@@ -27,7 +27,10 @@ export default {
 			return numeral(number).format('0,0')
 		},
 		formatPrice: (number) => {
-			return numeral(number).format('0,0')
+			return numeral(number).format('$0,0.00')
+		},
+		formatPriceSmall: (number) => {
+			return numeral(number).format('$0,0')
 		},
 		formatPercent: (number) => {
 			return numeral(number).format('0,0.00%')
