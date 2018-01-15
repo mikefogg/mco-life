@@ -2,17 +2,18 @@
 	.section.hero
 		navigation
 
-		h1
-			strong Six months
-			| after token lockup begins I predict the value of
-			strong $MCO
-			| to be
-			strong {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
-			| based solely on token lockup.
+		.header-text-container
+			h1
+				strong Six months
+				| after token lockup begins I predict the value of
+				strong $MCO
+				| to be
+				strong {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
+				| based solely on token lockup.
 
 	.section.explaination
 		.inner-content
-			h2#breakdownoverview How we got it
+			h2 How we got it
 			
 			p.statement First, we find the total amount of reservations in the last 30 days by tracking it daily
 			p.answer {{formatNumeral(recentData.reservations.thirtyDays.total)}}
@@ -45,7 +46,7 @@
 						| Month 6: 
 						strong {{formatNumeral(recentData.reservations.growth.month6)}}
 
-			p.statement That’s crazy. In the spirit of being extremely conservative still, let’s assume that growth gets slowed down by card manufacturing limitations, launching in various global regions at different times, etc. We’re going to only use strong 75% of our current growth rate
+			p.statement That’s crazy. In the spirit of being extremely conservative still, let’s assume that growth gets slowed down by card manufacturing limitations, launching in various global regions at different times, etc. We’re going to only use strong 65% of our current growth rate
 			p.answer
 				ul
 					li

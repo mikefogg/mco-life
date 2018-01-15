@@ -1,5 +1,11 @@
 <template lang='pug'>
 	#app
+		.disclaimer
+			| This is an
+			strong UNOFFICIAL
+			| website built to share information around the MCO token. Visit
+			a(href='https://mona.co' target='_blank') https://mona.co
+			| for Official Information
 		router-view
 </template>
 
@@ -31,13 +37,38 @@ html, body {
 	font-weight: 600;
 }
 
+.disclaimer {
+	color: #fff;
+	background: lighten($blue, 10);
+	padding: 14px 20px;
+	text-align: center;
+
+	strong {
+		margin: 0 10px;
+	}
+
+	a {
+		margin: 0 10px;
+		color: #fff;
+		text-decoration: underline;
+	}
+}
+
+.header-text-container {
+	height: 400px;
+  display: flex;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+
 //
 // Globals
 //
 
 a {
-	text-decoration: none;
-	color: #fff;
+	color: lighten($blue, 30);
+	text-decoration: underline;
 }
 
 h1 {

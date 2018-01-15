@@ -64,4 +64,9 @@ export default [
 	{ date: 'January 9, 2017', reservations: 919, price: 16.77 },
 	{ date: 'January 10, 2017', reservations: 798, price: 17.16 },
 
+	{ date: 'January 11, 2017', reservations: 822, price: 14.89 },
+	{ date: 'January 12, 2017', reservations: 666, price: 16.00 },
+	{ date: 'January 13, 2017', reservations: 754, price: 18.56 },
+	{ date: 'January 14, 2017', reservations: 756, price: 17.53 },
+
 ]

@@ -4,9 +4,11 @@ import RegistrationsPage from '@/components/pages/registrations'
 import SupplyDemandPage from '@/components/pages/supply-demand'
 import FudPage from '@/components/pages/fud'
 
+import VueAnalytics from 'vue-analytics'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
 	routes: [
 		{
 			path: '/',
@@ -25,3 +27,11 @@ export default new Router({
 		}
 	]
 })
+
+// Add GA
+Vue.use(VueAnalytics, {
+	id: 'UA-112492567-1',
+	router
+})
+
+export default router

@@ -1,13 +1,14 @@
 <template lang='pug'>
-	.header
-		.logo
-			router-link(:to="{ name: 'RegistrationsPage' }") mco.life
-		.navigation
-			ul
-				li: router-link(:to="{ name: 'RegistrationsPage' }") Registrations
-				li: router-link(:to="{ name: 'SupplyDemandPage' }") Token Supply & Demand
-				li: router-link(:to="{ name: 'FudPage' }") FUD Responses
-				//- li:router-link(:to="{ name: 'RegistrationsPage' }") Registrations
+	.nav-area
+		.header
+			.logo
+				router-link(:to="{ name: 'RegistrationsPage' }") mco.life
+			.navigation
+				ul
+					li: router-link(:to="{ name: 'RegistrationsPage' }") Registrations
+					li: router-link(:to="{ name: 'SupplyDemandPage' }") Token Supply & Demand Prediction
+					li: router-link(:to="{ name: 'FudPage' }") FUD Responses
+					//- li:router-link(:to="{ name: 'RegistrationsPage' }") Registrations
 </template>
 
 <script>
@@ -17,6 +18,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
 ul {
 	margin: 0;
 	padding: 0;
@@ -34,6 +40,16 @@ ul {
 				color: #fff;
 			}
 		}
+	}
+}
+
+//
+// Responsive
+//
+
+@media (min-width: 0px) and (max-width: 600px) {
+	ul li {
+		display: block;
 	}
 }
 </style>

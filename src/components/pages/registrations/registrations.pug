@@ -2,11 +2,16 @@
 	.section.hero
 		navigation
 		
-		h1
-			| As of
-			strong {{recentData.reservations.last.date}}
-			| we've averaged
-			strong {{recentData.reservations.thirtyDays.average}}
-			| reservations per day in the last thirty days! That's
-			strong {{recentData.reservations.total}}
-			| total. Crazy.
+		.header-text-container
+			h1
+				| As of
+				strong {{recentData.reservations.last.date}}
+				| we've averaged
+				strong {{formatNumeral(recentData.reservations.thirtyDays.average)}}
+				| reservations per day in the last thirty days! That's
+				strong {{formatNumeral(recentData.reservations.total)}}
+				| total. Crazy.
+	
+	.section.chart
+		.chart-container
+			canvas#chart(width="800" height="300")

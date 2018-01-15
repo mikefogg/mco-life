@@ -34,5 +34,5 @@ export default {
 			addedCirculation: Cards.monthlyPrices(true)
 		}
 	},
-	daily: {}
+	daily: DailyData
 }
