@@ -44,7 +44,7 @@ export default {
 	metaInfo: {
 		title: 'mco.life | MCO Token Information',
 		link: [
-    	{ rel: 'favicon', href: '/assets/images/favicon-32x32.png' }
+    	{ rel: 'favicon', href: './assets/images/favicon-32x32.png' }
 		]
   }
 }

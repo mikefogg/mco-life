@@ -22,7 +22,7 @@ export default {
 				}, {
 					tag: 'token',
 					question: 'The MCO token has no value',
-					answer: "<p>In order to gain access to some of the more premium features of the Monaco card (cashback, lounge access, and more) you will need to lock up a certain number of MCO for six months. As the growth in card registrations grows so will the number of people that require tokens to be locked up... at the same time that the supply of tokens is getting smaller. As you can imagine, this will increase the demand for the token itself. The token has value.</p><p><a href='/supply-and-demand'>Step over to the supply and demand prediction</a> page to see the value of Token Lockup in action!</p>",
+					answer: "<p>In order to gain access to some of the more premium features of the Monaco card (cashback, lounge access, and more) you will need to lock up a certain number of MCO for six months. As the growth in card registrations grows so will the number of people that require tokens to be locked up... at the same time that the supply of tokens is getting smaller. As you can imagine, this will increase the demand for the token itself. The token has value.</p><p>Step over to the <a href='/#/supply-and-demand'>Token Supply & Demand Prediction</a> page to see the value of Token Lockup in action!</p>",
 					references: [{
 						label: 'Twitter post about something',
 						url: 'http://google.com'
