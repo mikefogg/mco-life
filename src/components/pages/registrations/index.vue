@@ -75,43 +75,55 @@ export default {
 					yAxisID: 'y-axis-1',
 					data: priceData,
           // Point
-					pointBorderColor: 'rgba(126, 186, 132, 0.3)',
-          pointBackgroundColor: 'rgba(126, 186, 132, 0.3)',
-          pointHoverBackgroundColor: 'rgba(126, 186, 132, 0.3)',
-          pointHoverBorderColor: 'rgba(126, 186, 132, 0.3)',
+					pointBorderColor: 'rgba(144, 15, 36, 0.15)',
+          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+          pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+          pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
           pointBorderWidth: 6,
           pointHoverRadius: 8,
           pointHoverBorderWidth: 1,
           pointRadius: 3,
           // Background
 					backgroundColor: [
-						'rgba(126, 186, 132, 0.1)',
+						'rgba(144, 15, 36, 0.05)',
 					],
           // Border
 					borderColor: [
-						'rgba(126, 186, 132, 0.3)',
+						'rgba(144, 15, 36, 0.15)',
 					],
 					borderWidth: 2
 				}]
 			},
 			options: {
-				global: {
-		      responsive: true,
-		      maintainAspectRatio: false
-		    },
+	      responsive: true,
+	      maintainAspectRatio: false,
+				legend: {
+					position: 'bottom'
+				},
 				scales: {
+					xAxes: [{
+						ticks: {
+							autoSkip: true
+						}
+					}],
 					yAxes: [{
 						id: 'y-axis-0',
 						position: 'left',
 						ticks: {
 							beginAtZero:true
-						}
+						},
+						gridLines: {
+              color: 'rgba(37, 105, 149, 0.1)'
+            }
 					}, {
 						id: 'y-axis-1',
 						position: 'right',
 						ticks: {
 							beginAtZero:true
-						}
+						},
+						gridLines: {
+              color: 'rgba(144, 15, 36, 0.1)'
+            }
 					}]
 				}
 			}
@@ -156,10 +168,12 @@ export default {
 
 .chart-container {
 	position: relative;
-	max-height: 300px;
+	max-height: 800px;
+	padding: 0px;
+	margin-top: 40px;
 
 	canvas#chart {
-		height: 300px;
+		height: 800px;
 	}
 }
 

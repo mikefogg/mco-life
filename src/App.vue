@@ -7,11 +7,46 @@
 			a(href='https://mona.co' target='_blank') https://mona.co
 			| for Official Information
 		router-view
+		.footer
+			.official-links
+				a(href='#')
+			.contact
+				.label
+					| Stay tuned for updates!
+				ul.buttons
+					li: a.twitter(href='https://twitter.com/mcolife' target='_blank') Follow on Twitter
+
+			.donations
+				.label
+					| As always, donations are always appreciated to help keep the servers running
+					em #willworkformco
+				ul.methods
+					li
+						span BTC:
+						| 18HXh3Z6v284cy6F1PA6mPtFQig39zrNWq
+					li
+						span ETH/MCO:
+						| 0x2415f94dF452C91BbfF510aEEc7eF89640b1cB63
+			.built-by
+				| Built with
+				span 100% Pure Believe
+				| from
+				span Boston.
+				| Find me on slack
+				strong @mikef
+				| or
+				strong: a(href='mailto:mcolife@mikefogg.co') shoot me an email
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+	metaInfo: {
+		title: 'mco.life | MCO Token Information',
+		link: [
+    	{ rel: 'favicon', href: '/assets/images/favicon-32x32.png' }
+		]
+  }
 }
 </script>
 
@@ -40,11 +75,12 @@ html, body {
 .disclaimer {
 	color: #fff;
 	background: lighten($blue, 10);
+	border-bottom: 1px solid $blue;
 	padding: 14px 20px;
 	text-align: center;
 
 	strong {
-		margin: 0 10px;
+		margin: 0 6px;
 	}
 
 	a {
@@ -84,8 +120,9 @@ h2 {
 	font-size: 52px;
 	font-weight: 500;
 	line-height: 80px;
-
+	color: $blue;
 	border-bottom: 4px solid $ruby;
+	text-align: left;
 }
 
 p {
@@ -97,7 +134,7 @@ p {
 
 	&.hero {
 		height: 700px;
-		background: $blue url('./assets/pattern.svg') no-repeat center center;
+		background: $blue url('./assets/images/pattern.svg') no-repeat center center;
 	  -webkit-background-size: cover;
 	  -moz-background-size: cover;
 	  -o-background-size: cover;
@@ -136,6 +173,103 @@ h1 {
 		color: #fff;
 		margin: 0 20px;
 		font-size: 58px;
+	}
+}
+
+//
+// Footer
+//
+
+.contact {
+	padding: 60px 40px;
+	background: $blue;
+	text-align: center;
+	color: #fff;
+
+	.label {
+		font-size: 40px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.buttons {
+		margin: 40px 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: 14px;
+
+		li {
+			display: inline-block;
+
+			a {
+				background: #fff;
+				color: $blue;
+				display: inline-block;
+				padding: 20px 40px;
+				border-radius: 40px;
+				text-decoration: none;
+				font-size: 24px;
+
+				&:hover {
+					background: rgba(#fff, 0.9);
+				}
+			}
+		}
+
+		span {
+			color: rgba(#fff, 0.6);
+			margin-right: 10px;
+		}
+	}
+}
+
+.donations {
+	padding: 60px 40px;
+	background: darken($blue, 10);
+	text-align: center;
+	color: #fff;
+
+	.label {
+		font-size: 24px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.methods {
+		margin: 20px 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: 14px;
+
+		span {
+			color: rgba(#fff, 0.6);
+			margin-right: 10px;
+		}
+	}
+}
+
+.built-by {
+	background: darken($blue, 10);
+	border-top: 1px solid rgba(#fff, 0.05);
+	color: rgba(#fff, 0.35);
+	font-size: 14px;
+	text-align: center;
+	padding: 20px;
+
+	span, strong {
+		margin: 0 5px;
+		color: rgba(#fff, 0.45);
+	}
+
+	a {
+		text-decoration: underline;
+		color: rgba(#fff, 0.45);
 	}
 }
 

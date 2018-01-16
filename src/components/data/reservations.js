@@ -54,7 +54,7 @@ const reservations = {
 		// Only use half the distance
 		// const conservativeGrowth = (((last30 - first30) / 2) + first30) / first30
 		// Use 75% of the growth rate (the amount over 100%)
-		const conservativeGrowth = growth - (0.35 * initialGrowth)
+		const conservativeGrowth = growth  - (0.35 * initialGrowth)
 		// Months
 		const month1 = last30 * growth
 		const month2 = month1 * growth

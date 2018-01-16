@@ -77,7 +77,17 @@ $ruby: #900F24;
 }
 
 .statement {
+	&.advice {
+		font-size: 20px;
+		padding: 20px;
+		background: rgba($ruby, 0.1);
+		border-radius: 6px;
+	}
 
+	span.ruby {
+		color: $ruby;
+		margin-right: 10px;
+	}
 }
 
 .answer {

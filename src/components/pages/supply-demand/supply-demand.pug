@@ -5,7 +5,7 @@
 		.header-text-container
 			h1
 				strong Six months
-				| after token lockup begins I predict the value of
+				| after token lockup begins I conservatively predict the value of
 				strong $MCO
 				| to be
 				strong {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
@@ -13,7 +13,13 @@
 
 	.section.explaination
 		.inner-content
-			h2 How we got it
+			h2 How I got to {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
+			
+			p.statement.advice 
+				span.ruby DISCLAIMER:
+				| ** This is not financial advice. I am a Software Engineer, not a financial advisor. The goal here is to show you how I came to my own prediction. Please... please do your own research. Use everything here as a starting point if you want, but take it as it is -- my prediction. **
+			
+			p.statement Ok... let's go!
 			
 			p.statement First, we find the total amount of reservations in the last 30 days by tracking it daily
 			p.answer {{formatNumeral(recentData.reservations.thirtyDays.total)}}
@@ -168,7 +174,7 @@
 						| After Month 6: 
 						strong {{formatNumeral(recentData.cards.lockup.basic.month6)}}
 			
-			p.statement I know… I know, that’s crazy, there are only 13,000,000 MCO in circulation! We’re going to fix up a few things but I wanted to show you those numbers first :)
+			p.statement I know… I know, that’s crazy, there are only {{formatNumeral(recentData.tokens.circulation)}} MCO in circulation! We’re going to fix up a few things but I wanted to show you those numbers first :)
 			
 			p.statement We’re going to be conservative and assume three things that will reduce those lockup numbers:
 			p.answer

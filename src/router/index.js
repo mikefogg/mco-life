@@ -5,8 +5,10 @@ import SupplyDemandPage from '@/components/pages/supply-demand'
 import FudPage from '@/components/pages/fud'
 
 import VueAnalytics from 'vue-analytics'
+import Meta from 'vue-meta'
 
 Vue.use(Router)
+Vue.use(Meta)
 
 const router = new Router({
 	routes: [

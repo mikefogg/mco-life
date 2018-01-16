@@ -46,7 +46,7 @@ export default {
 				}, {
 					tag: 'silent',
 					question: 'Monaco doesn’t communicate with the community',
-					answer: '<p>I’ve gotta day, in Sept - November that was definitely true. We were all in awe of the lack of communication from the team.</p><p>But, like any company worth their merit, Monaco has listened to the community and made an amazing effort to improve their communication. They added two new members of the team (Ally and Yvonne, they’re awesome) who are on slack answering questions and liking meme’s every day. Come join the discussion by sending an email to <a href="mailto:contact@mona.co">contact@mona.co</a> with the email address you used to sign up for the app! Their addition, along with Kris’s consistent weekly Q&A’s have helped improve transparency and reduced the community anxiety levels.</p>',
+					answer: '<p>I’ve gotta say, in Sept - November that was definitely true. We were all in awe of the lack of communication from the team.</p><p>But, like any company worth their merit, Monaco has listened to the community and made an amazing effort to improve their communication. They added two new members of the team (Ally and Yvonne, they’re awesome) who are on slack answering questions and liking meme’s every day. Come join the discussion by sending an email to <a href="mailto:contact@mona.co">contact@mona.co</a> with the email address you used to sign up for the app! Their addition, along with Kris’s consistent weekly Q&A’s have helped improve transparency and reduced the community anxiety levels.</p>',
 					references: [{
 						label: 'Twitter post about something',
 						url: 'http://google.com'
