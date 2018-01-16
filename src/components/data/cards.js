@@ -180,7 +180,6 @@ const cards = {
 
 		// Grab the current token breakdowns
 		const counts = cards.tokenCounts()
-		console.log(counts)
 		// Get the actual breakdowns per month
 		const breakdowns = {
 			pre: cards.breakdown(Reservations.total(), initialBreakdown, {
