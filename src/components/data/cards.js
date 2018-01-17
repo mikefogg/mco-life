@@ -6,8 +6,33 @@ import numeral from 'numeral'
 import moment from 'moment'
 
 const cards = {
-	tokensInCirculation: () => {
-		return 13085540
+	tokensTotal: () => {
+		return 31587682
+	},
+	tokensAvailableByMonth: () => {
+		const monthlyCirculation = cards.tokensInCirculationByMonth(true)
+		const lockedUp = _.values(cards.lockup(true, true).total)
+		return _.map(monthlyCirculation, (val, index) => {
+			return val - lockedUp[index]
+		})
+	},
+	tokensInCirculationByMonth: (addTokens = false) => {
+		const initial = 13195542
+
+		// Add tokens each month into circulation
+		const circulationArray = [initial]
+		const addAmount = 0.0025 // Add 2.5% each month
+		for (var i=0;i<6;i++) {
+			if (addTokens) {
+				const last = _.last(circulationArray)
+				circulationArray.push(last + (last * addAmount))
+			} else {
+				// Just use the normal circulation
+				circulationArray.push(initial)
+			}
+		}
+
+		return circulationArray
 	},
 	tokenCounts: () => {
 		const counts = {
@@ -24,7 +49,7 @@ const cards = {
 			blue: {
 				basic: counts.blue,
 				dynamic: {
-					pre: counts.blue,
+					initial: counts.blue,
 					month1: counts.blue,
 					month2: counts.blue,
 					month3: counts.blue,
@@ -37,7 +62,7 @@ const cards = {
 				basic: counts.ruby,
 				dynamic: {
 					// Dirty... but effective and easy to read :)
-					pre: counts.ruby,
+					initial: counts.ruby,
 					month1: counts.ruby,
 					month2: counts.ruby,
 					month3: counts.ruby,
@@ -50,7 +75,7 @@ const cards = {
 				basic: counts.silver,
 				dynamic: {
 					// Dirty... but effective and easy to read :)
-					pre: counts.silver,
+					initial: counts.silver,
 					month1: counts.silver,
 					month2: counts.silver,
 					month3: counts.silver,
@@ -63,7 +88,7 @@ const cards = {
 				basic: counts.black,
 				dynamic: {
 					// Dirty... but effective and easy to read :)
-					pre: counts.black,
+					initial: counts.black,
 					month1: counts.black,
 					month2: counts.black,
 					month3: counts.black,
@@ -148,16 +173,133 @@ const cards = {
 		// Calculate the favoring-free breakdown percentages
 		//
 
-		const breakdownPercents = []
+		const breakdownPercents = cards.breakdownPercentages(breakdownChange)
+
+		//
+		// Now get the total monthly new tokens
+		//
+
+		// Grab the current token breakdowns
+		const counts = cards.tokenCounts()
+		// Get the actual breakdowns per month
+		// NOTE: I HATE that this is hardcoded like this, boo, but... time is important here
+		const breakdowns = {
+			initial: cards.breakdown(Reservations.total(), breakdownPercents.initial, {
+				blue: dynamic ? counts.blue.dynamic.initial : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.initial : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.initial : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.initial : counts.black.basic
+			}),
+			month1: cards.breakdown(reservations.month1, breakdownPercents.month1, {
+				blue: dynamic ? counts.blue.dynamic.month1 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month1 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month1 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month1 : counts.black.basic
+			}),
+			month2: cards.breakdown(reservations.month2, breakdownPercents.month2, {
+				blue: dynamic ? counts.blue.dynamic.month2 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month2 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month2 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month2 : counts.black.basic
+			}),
+			month3: cards.breakdown(reservations.month3, breakdownPercents.month3, {
+				blue: dynamic ? counts.blue.dynamic.month3 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month3 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month3 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month3 : counts.black.basic
+			}),
+			month4: cards.breakdown(reservations.month4, breakdownPercents.month4, {
+				blue: dynamic ? counts.blue.dynamic.month4 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month4 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month4 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month4 : counts.black.basic
+			}),
+			month5: cards.breakdown(reservations.month5, breakdownPercents.month5, {
+				blue: dynamic ? counts.blue.dynamic.month5 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month5 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month5 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month5 : counts.black.basic
+			}),
+			month6: cards.breakdown(reservations.month6, breakdownPercents.month6, {
+				blue: dynamic ? counts.blue.dynamic.month6 : counts.blue.basic,
+				ruby: dynamic ? counts.ruby.dynamic.month6 : counts.ruby.basic,
+				silver: dynamic ? counts.silver.dynamic.month6 : counts.silver.basic,
+				black: dynamic ? counts.black.dynamic.month6 : counts.black.basic
+			})
+		}
+		// Get the silver and ruby counts
+		// This is disgusting, but, i don't have time to do it the right way for now :)
+		const monthlyTokens = {
+			initial: {
+				ruby: breakdowns.initial.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens
+			},
+			month1: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens
+			},
+			month2: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens
+			},
+			month3: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens
+			},
+			month4: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens
+			},
+			month5: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens + breakdowns.month5.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens + breakdowns.month5.silver.conservative.tokens
+			},
+			month6: {
+				ruby: breakdowns.initial.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens + breakdowns.month5.ruby.conservative.tokens + breakdowns.month6.ruby.conservative.tokens,
+				silver: breakdowns.initial.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens + breakdowns.month5.silver.conservative.tokens + breakdowns.month6.silver.conservative.tokens
+			},
+		}
+
+		return {
+			months: monthlyTokens,
+			breakdownPercents: breakdownPercents,
+			total: {
+				initial: monthlyTokens.initial.ruby + monthlyTokens.initial.silver,
+				month1: monthlyTokens.month1.ruby + monthlyTokens.month1.silver,
+				month2: monthlyTokens.month2.ruby + monthlyTokens.month2.silver,
+				month3: monthlyTokens.month3.ruby + monthlyTokens.month3.silver,
+				month4: monthlyTokens.month4.ruby + monthlyTokens.month4.silver,
+				month5: monthlyTokens.month5.ruby + monthlyTokens.month5.silver,
+				month6: monthlyTokens.month6.ruby + monthlyTokens.month6.silver
+			}
+		}
+	},
+
+	// Find out the breakdown percentages
+	breakdownPercentages: (breakdownChange = false) => {
+		let initialBreakdown = {
+			blue: 0.6582,
+			ruby: 0.2488,
+			silver: 0.0913,
+			black: 0.0018
+		}
+
+		//
+		// Calculate the favoring-free breakdown percentages
+		//
+
+		const breakdownPercents = {
+			initial: initialBreakdown
+		}
 		// Loop through and calculate new breakdowns
 		for (var i=0; i<6; i++) {
 			// Just keep the normal breakdown amount
 			if (!breakdownChange) {
-				breakdownPercents.push(initialBreakdown)
+				breakdownPercents[`month${i+1}`] = initialBreakdown
 				continue
 			}
 			// Grab the last percent
-			const last = breakdownPercents[breakdownPercents.length-1] || _.clone(initialBreakdown)
+			const last = _.clone(breakdownPercents[`month${i}`] || initialBreakdown)
 			// Take 10% from silver
 			const moveAmount = (last.silver * 0.10)
 			// Split that between blue and ruby (with more favoring free)
@@ -170,125 +312,20 @@ const cards = {
 			last.blue += (moveAmount * percentBlue)
 			last.ruby += (moveAmount * percentRuby)
 
-			breakdownPercents.push(current)
+			breakdownPercents[`month${i+1}`] = current
 		}
 
-
-		//
-		// Now get the total monthly new tokens
-		//
-
-		// Grab the current token breakdowns
-		const counts = cards.tokenCounts()
-		// Get the actual breakdowns per month
-		const breakdowns = {
-			pre: cards.breakdown(Reservations.total(), initialBreakdown, {
-				blue: dynamic ? counts.blue.dynamic.pre : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.pre : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.pre : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.pre : counts.black.basic
-			}),
-			month1: cards.breakdown(reservations.month1, breakdownPercents[0], {
-				blue: dynamic ? counts.blue.dynamic.month1 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month1 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month1 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month1 : counts.black.basic
-			}),
-			month2: cards.breakdown(reservations.month2, breakdownPercents[1], {
-				blue: dynamic ? counts.blue.dynamic.month2 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month2 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month2 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month2 : counts.black.basic
-			}),
-			month3: cards.breakdown(reservations.month3, breakdownPercents[2], {
-				blue: dynamic ? counts.blue.dynamic.month3 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month3 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month3 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month3 : counts.black.basic
-			}),
-			month4: cards.breakdown(reservations.month4, breakdownPercents[3], {
-				blue: dynamic ? counts.blue.dynamic.month4 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month4 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month4 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month4 : counts.black.basic
-			}),
-			month5: cards.breakdown(reservations.month5, breakdownPercents[4], {
-				blue: dynamic ? counts.blue.dynamic.month5 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month5 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month5 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month5 : counts.black.basic
-			}),
-			month6: cards.breakdown(reservations.month6, breakdownPercents[5], {
-				blue: dynamic ? counts.blue.dynamic.month6 : counts.blue.basic,
-				ruby: dynamic ? counts.ruby.dynamic.month6 : counts.ruby.basic,
-				silver: dynamic ? counts.silver.dynamic.month6 : counts.silver.basic,
-				black: dynamic ? counts.black.dynamic.month6 : counts.black.basic
-			})
-		}
-		// Get the silver and ruby counts
-		// This is disgusting, but, i don't have time to do it the right way for now :)
-		const monthlyTokens = {
-			pre: {
-				ruby: breakdowns.pre.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens
-			},
-			month1: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens
-			},
-			month2: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens
-			},
-			month3: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens
-			},
-			month4: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens
-			},
-			month5: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens + breakdowns.month5.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens + breakdowns.month5.silver.conservative.tokens
-			},
-			month6: {
-				ruby: breakdowns.pre.ruby.conservative.tokens + breakdowns.month1.ruby.conservative.tokens + breakdowns.month2.ruby.conservative.tokens + breakdowns.month3.ruby.conservative.tokens + breakdowns.month4.ruby.conservative.tokens + breakdowns.month5.ruby.conservative.tokens + breakdowns.month6.ruby.conservative.tokens,
-				silver: breakdowns.pre.silver.conservative.tokens + breakdowns.month1.silver.conservative.tokens + breakdowns.month2.silver.conservative.tokens + breakdowns.month3.silver.conservative.tokens + breakdowns.month4.silver.conservative.tokens + breakdowns.month5.silver.conservative.tokens + breakdowns.month6.silver.conservative.tokens
-			},
-		}
-
-		return {
-			pre: monthlyTokens.pre.ruby + monthlyTokens.pre.silver,
-			month1: monthlyTokens.month1.ruby + monthlyTokens.month1.silver,
-			month2: monthlyTokens.month2.ruby + monthlyTokens.month2.silver,
-			month3: monthlyTokens.month3.ruby + monthlyTokens.month3.silver,
-			month4: monthlyTokens.month4.ruby + monthlyTokens.month4.silver,
-			month5: monthlyTokens.month5.ruby + monthlyTokens.month5.silver,
-			month6: monthlyTokens.month6.ruby + monthlyTokens.month6.silver
-		}
+		return breakdownPercents
 	},
 
 	// Get the monthly token price
 	monthlyPrices: (addTokens = false) => {
-		const circulation = cards.tokensInCirculation()
-		const dynamic = cards.lockup(true, true)
+		const circulationArray = cards.tokensInCirculationByMonth(addTokens)
+		const dynamic = cards.lockup(true, true).total
 		const currentPrice = Reservations.last().price
-		// Add tokens each month into circulation
-		const circulationArray = [circulation]
-		const addAmount = 0.0025 // Add 2.5% each month
-		for (var i=0;i<6;i++) {
-			if (addTokens) {
-				const last = _.last(circulationArray)
-				circulationArray.push(last + (last * addAmount))
-			} else {
-				// Just use the normal circulation
-				circulationArray.push(circulation)
-			}
-		}
 
 		const prices = {
-			pre: {
+			initial: {
 				price: currentPrice,
 				marketcap: currentPrice * circulationArray[0],
 			},
@@ -300,7 +337,7 @@ const cards = {
 			month6: {},
 		}
 		// Grab the months
-		prices.month1.price = prices.pre.marketcap / (circulationArray[1] - dynamic.month1)
+		prices.month1.price = prices.initial.marketcap / (circulationArray[1] - dynamic.month1)
 		prices.month1.marketcap = prices.month1.price * circulationArray[1]
 
 		prices.month2.price = prices.month1.marketcap / (circulationArray[2] - dynamic.month2)
@@ -319,6 +356,60 @@ const cards = {
 		prices.month6.marketcap = prices.month6.price * circulationArray[6]
 
 		return prices
+	},
+
+	//
+	// Some calculations for the UI
+	//
+
+	newCardsByMonth: (cardType) => {
+		const percentages = cards.breakdownPercentages(true)
+
+		return _.compact(_.map(Reservations.growth().conservative, (val, key, index) => {
+			if (key == 'rate') return null;
+			// Get the number of new cards
+			const newCards = key == 'initial' ? Reservations.total() : val
+			// Grab the % of this color card in this month
+			const cardPercent = percentages[key][cardType]
+			// Now multiply that times the number of total new cards
+			return newCards * cardPercent
+		}))
+	},
+
+	//
+	// Some calculations for the UI
+	//
+
+	totalCardsByMonth: (cardType) => {
+		const cardTypes = ['blue', 'ruby', 'silver', 'black']
+		const totalCardsByMonth = cards.newCardsByMonth(cardType)
+
+		const totalCards = []
+
+		const newCardsByMonth = cards.newCardsByMonth(cardType)
+		_.each(newCardsByMonth, (val, index) => {
+			const prevVal = totalCards[index-1]
+			if (prevVal) {
+				// Add it if it exists
+				totalCards.push(val + prevVal)
+			} else {
+				// Create it if it doesnt
+				totalCards.push(val)
+			}
+		})
+
+		return totalCards
+	},
+
+	//
+	// Get the USD requirement for a card for each month
+	//
+
+	usdRequiredByMonth: (cardType) => {
+		return _.map(cards.tokenCounts()[cardType].dynamic, (val, key) => {
+			const prices = cards.monthlyPrices(true)
+			return prices[key].price * val
+		})
 	}
 }
 

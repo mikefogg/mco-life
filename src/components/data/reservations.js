@@ -17,9 +17,9 @@ const reservations = {
 	total: () => {
 		const days = _.filter(DailyData, (d) => { return !d.ignore })
 		const newCount = _.sumBy(days, 'reservations')
-		// Pre tracking amount
-		const preTracking = 26675
-		return newCount + preTracking
+		// initial tracking amount
+		const initialTracking = 26675
+		return newCount + initialTracking
 	},
 	// Calculate last 30 day average
 	lastThirtyDays: {
@@ -72,7 +72,7 @@ const reservations = {
 		// Return them
 		return {
 			rate: growth - 1,
-			pre: last30,
+			initial: last30,
 			month1: month1,
 			month2: month2,
 			month3: month3,
@@ -81,7 +81,7 @@ const reservations = {
 			month6: month6,
 			conservative: {
 				rate: conservativeGrowth - 1,
-				pre: last30,
+				initial: last30,
 				month1: conMonth1,
 				month2: conMonth2,
 				month3: conMonth3,
@@ -93,18 +93,18 @@ const reservations = {
 	},
 
 	months: () => {
-		const pre = reservations.total()
+		const initial = reservations.total()
 		const growth = reservations.growth().conservative
 		// Add the new growth to the total amount
-		const month1 = pre + growth.month1
-		const month2 = pre + growth.month1 + growth.month2
-		const month3 = pre + growth.month1 + growth.month2 + growth.month3
-		const month4 = pre + growth.month1 + growth.month2 + growth.month3 + growth.month4
-		const month5 = pre + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5
-		const month6 = pre + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5 + growth.month6
+		const month1 = initial + growth.month1
+		const month2 = initial + growth.month1 + growth.month2
+		const month3 = initial + growth.month1 + growth.month2 + growth.month3
+		const month4 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4
+		const month5 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5
+		const month6 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5 + growth.month6
 		// Return the combined months
 		return {
-			pre: pre,
+			initial: initial,
 			month1: month1,
 			month2: month2,
 			month3: month3,

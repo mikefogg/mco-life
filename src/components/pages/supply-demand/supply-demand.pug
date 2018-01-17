@@ -10,7 +10,60 @@
 				| to be
 				strong {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
 				| based solely on token lockup.
-
+	
+	.section.grid
+		.inner-content
+			table.grid-table
+				thead
+					tr
+						th
+						th Pre-Lockup
+						th After Month 1
+						th After Month 2
+						th After Month 3
+						th After Month 4
+						th After Month 5
+						th After Month 6
+				tbody
+					template(v-for='card in gridData.cards')
+						tr.important
+							td(colspan='8') {{card.name}}
+						tr
+							td MCO Requirement
+							td(v-for='val in card.mcoRequired') {{val}}
+						tr
+							td USD Requirement
+							td(v-for='val in card.usdRequired') {{val}}
+						tr
+							td New Cards
+							td(v-for='val in card.newCards') {{val}}
+						tr
+							td Total Cards
+							td(v-for='val in card.totalCards') {{val}}
+					tr.important
+						td(colspan='8').important Tokens
+					tr
+						td Total
+						td(v-for='val in gridData.tokens.total') {{val}}
+					tr
+						td Circulation
+						td(v-for='val in gridData.tokens.circulation') {{val}}
+					tr
+						td Total Locked Up
+						td(v-for='val in gridData.tokens.totalLockedUp') {{val}}
+					tr
+						td Available
+						td(v-for='val in gridData.tokens.available') {{val}}
+					tr.important
+						td(colspan='8') Value
+					tr
+						td Price
+						td(v-for='val in gridData.values.marketcap') {{val}}
+					tr
+						td Price
+						td(v-for='val in gridData.values.price') {{val}}
+	
+	
 	.section.explaination
 		.inner-content
 			h2 How I got to {{formatPriceSmall(recentData.tokens.monthlyPrices.addedCirculation.month6.price)}}
@@ -32,7 +85,7 @@
 				ul
 					li
 						| Last 30: 
-						strong {{formatNumeral(recentData.reservations.growth.pre)}}
+						strong {{formatNumeral(recentData.reservations.growth.initial)}}
 					li
 						| Month 1: 
 						strong {{formatNumeral(recentData.reservations.growth.month1)}}
@@ -57,7 +110,7 @@
 				ul
 					li
 						| Last 30: 
-						strong {{formatNumeral(recentData.reservations.growth.conservative.pre)}}
+						strong {{formatNumeral(recentData.reservations.growth.conservative.initial)}}
 					li
 						| Month 1: 
 						strong {{formatNumeral(recentData.reservations.growth.conservative.month1)}}
@@ -145,7 +198,7 @@
 			
 			p.statement Great, so we now have a total estimated MCO lockup of
 			p.answer
-				strong {{formatNumeral(recentData.cards.lockup.basic.pre)}}
+				strong {{formatNumeral(recentData.cards.lockup.basic.initial)}}
 			
 			p.statement And we haven’t even started marketing!
 			
@@ -154,7 +207,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatNumeral(recentData.cards.lockup.basic.pre)}}
+						strong {{formatNumeral(recentData.cards.lockup.basic.initial)}}
 					li
 						| After Month 1: 
 						strong {{formatNumeral(recentData.cards.lockup.basic.month1)}}
@@ -190,7 +243,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatNumeral(recentData.cards.lockup.conservative.pre)}}
+						strong {{formatNumeral(recentData.cards.lockup.conservative.initial)}}
 					li
 						| After Month 1: 
 						strong {{formatNumeral(recentData.cards.lockup.conservative.month1)}}
@@ -215,7 +268,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatNumeral(recentData.cards.lockup.dynamic.pre)}}
+						strong {{formatNumeral(recentData.cards.lockup.dynamic.initial)}}
 					li
 						| After Month 1: 
 						strong {{formatNumeral(recentData.cards.lockup.dynamic.month1)}}
@@ -277,10 +330,10 @@
 				ul
 					li
 						| Current Price: 
-						strong {{formatPrice(recentData.tokens.monthlyPrices.static.pre.price)}}
+						strong {{formatPrice(recentData.tokens.monthlyPrices.static.initial.price)}}
 					li
 						| Current Market Cap: 
-						strong {{formatPrice(recentData.tokens.monthlyPrices.static.pre.marketcap)}}
+						strong {{formatPrice(recentData.tokens.monthlyPrices.static.initial.marketcap)}}
 
 			p.statement Based on those numbers at the end of month 1 the price of a token with our new limited availability of tokens would be
 			p.answer {{formatPrice(recentData.tokens.monthlyPrices.static.month1.price)}}
@@ -293,7 +346,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatPrice(recentData.tokens.monthlyPrices.static.pre.marketcap)}}
+						strong {{formatPrice(recentData.tokens.monthlyPrices.static.initial.marketcap)}}
 					li
 						| End of Month 1: 
 						strong {{formatPrice(recentData.tokens.monthlyPrices.static.month1.marketcap)}}
@@ -318,7 +371,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatPrice(recentData.tokens.monthlyPrices.static.pre.price)}}
+						strong {{formatPrice(recentData.tokens.monthlyPrices.static.initial.price)}}
 					li
 						| End of Month 1: 
 						strong {{formatPrice(recentData.tokens.monthlyPrices.static.month1.price)}}
@@ -345,7 +398,7 @@
 				ul
 					li
 						| Pre-Lockup: 
-						strong {{formatPrice(recentData.tokens.monthlyPrices.addedCirculation.pre.price)}}
+						strong {{formatPrice(recentData.tokens.monthlyPrices.addedCirculation.initial.price)}}
 					li
 						| End of Month 1: 
 						strong {{formatPrice(recentData.tokens.monthlyPrices.addedCirculation.month1.price)}}

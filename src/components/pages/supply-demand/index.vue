@@ -13,9 +13,55 @@ export default {
   name: 'SupplyDemandPage',
   data () {
     return {
-      recentData: {}
+      recentData: {},
     }
   },
+	computed: {
+		gridData: function() {
+			return {
+				cards: [
+					{
+						name: 'Midnight Blue',
+						mcoRequired: _.map(this.recentData.cards.tokenCounts.blue.dynamic, (val) => this.formatDecimal(val)),
+						usdRequired: _.map(this.recentData.cards.calculations.usdRequiredByMonth('blue'), (val) => this.formatPrice(val)),
+						newCards: _.map(this.recentData.cards.calculations.newCardsByMonth('blue'), (val) => this.formatNumeral(val)),
+						totalCards: _.map(this.recentData.cards.calculations.totalCardsByMonth('blue'), (val) => this.formatNumeral(val)),
+					},
+					{
+						name: 'Ruby Steel',
+						mcoRequired: _.map(this.recentData.cards.tokenCounts.ruby.dynamic, (val) => this.formatDecimal(val)),
+						usdRequired: _.map(this.recentData.cards.calculations.usdRequiredByMonth('ruby'), (val) => this.formatPrice(val)),
+						newCards: _.map(this.recentData.cards.calculations.newCardsByMonth('ruby'), (val) => this.formatNumeral(val)),
+						totalCards: _.map(this.recentData.cards.calculations.totalCardsByMonth('ruby'), (val) => this.formatNumeral(val)),
+					},
+					{
+						name: 'Silver & Rose Gold',
+						mcoRequired: _.map(this.recentData.cards.tokenCounts.silver.dynamic, (val) => this.formatDecimal(val)),
+						usdRequired: _.map(this.recentData.cards.calculations.usdRequiredByMonth('silver'), (val) => this.formatPrice(val)),
+						newCards: _.map(this.recentData.cards.calculations.newCardsByMonth('silver'), (val) => this.formatNumeral(val)),
+						totalCards: _.map(this.recentData.cards.calculations.totalCardsByMonth('silver'), (val) => this.formatNumeral(val)),
+					},
+					{
+						name: 'Obsidian Black',
+						mcoRequired: _.map(this.recentData.cards.tokenCounts.black.dynamic, (val) => this.formatDecimal(val)),
+						usdRequired: _.map(this.recentData.cards.calculations.usdRequiredByMonth('black'), (val) => this.formatPrice(val)),
+						newCards: _.map(this.recentData.cards.calculations.newCardsByMonth('black'), (val) => this.formatNumeral(val)),
+						totalCards: _.map(this.recentData.cards.calculations.totalCardsByMonth('black'), (val) => this.formatNumeral(val)),
+					}
+				],
+				tokens: {
+					total: _.times(7, (num) => this.formatDecimal(this.recentData.tokens.total)),
+					circulation: _.map(this.recentData.tokens.circulationByMonth, (val) => this.formatDecimal(val)),
+					totalLockedUp: _.map(_.values(this.recentData.cards.lockup.dynamic), (val) => this.formatDecimal(val)),
+					available: _.map(this.recentData.tokens.availableByMonth, (val) => this.formatDecimal(val))
+				},
+				values: {
+					marketcap: _.map(_.values(this.recentData.tokens.monthlyPrices.addedCirculation), (val) => this.formatPrice(val.marketcap)),
+					price: _.map(_.values(this.recentData.tokens.monthlyPrices.addedCirculation), (val) => this.formatPrice(val.price))
+				}
+			}
+		}
+	},
 	components: {
 		'navigation': Navigation
 	},
@@ -32,6 +78,9 @@ export default {
 		this.resizeHero()
 	},
 	methods: {
+		formatDecimal: (number) => {
+			return numeral(number).format('0,0.00')
+		},
 		formatNumeral: (number) => {
 			return numeral(number).format('0,0')
 		},
@@ -62,6 +111,32 @@ export default {
 <style lang='scss' scoped>
 $blue: #0D3458;
 $ruby: #900F24;
+
+.section.grid {
+	color: $blue;
+	text-align: left;
+	font-size: 14px;
+
+	table {
+		width: 100%;
+	}
+
+	tr.important {
+		td {
+			background: $blue;
+			color: #fff;
+		}
+	}
+
+	td, th {
+		padding: 5px 10px;
+		border: 1px solid #e2e2e2;
+	}
+
+	th {
+		text-align: center;
+	}
+}
 
 .section.explaination {
 	text-align: left;

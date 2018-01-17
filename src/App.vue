@@ -130,6 +130,7 @@ p {
 }
 
 .section {
+	position: relative;
 	padding: 20px;
 
 	&.hero {
