@@ -72,7 +72,7 @@ const reservations = {
 		// Return them
 		return {
 			rate: growth - 1,
-			initial: last30,
+			initial: 0,
 			month1: month1,
 			month2: month2,
 			month3: month3,
@@ -81,7 +81,7 @@ const reservations = {
 			month6: month6,
 			conservative: {
 				rate: conservativeGrowth - 1,
-				initial: last30,
+				initial: 0,
 				month1: conMonth1,
 				month2: conMonth2,
 				month3: conMonth3,
@@ -96,12 +96,12 @@ const reservations = {
 		const initial = reservations.total()
 		const growth = reservations.growth().conservative
 		// Add the new growth to the total amount
-		const month1 = initial + growth.month1
-		const month2 = initial + growth.month1 + growth.month2
-		const month3 = initial + growth.month1 + growth.month2 + growth.month3
-		const month4 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4
-		const month5 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5
-		const month6 = initial + growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5 + growth.month6
+		const month1 = growth.month1
+		const month2 = growth.month1 + growth.month2
+		const month3 = growth.month1 + growth.month2 + growth.month3
+		const month4 = growth.month1 + growth.month2 + growth.month3 + growth.month4
+		const month5 = growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5
+		const month6 = growth.month1 + growth.month2 + growth.month3 + growth.month4 + growth.month5 + growth.month6
 		// Return the combined months
 		return {
 			initial: initial,

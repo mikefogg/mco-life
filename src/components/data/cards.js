@@ -21,7 +21,7 @@ const cards = {
 
 		// Add tokens each month into circulation
 		const circulationArray = [initial]
-		const addAmount = 0.0025 // Add 2.5% each month
+		const addAmount = 0.025 // Add 2.5% each month
 		for (var i=0;i<6;i++) {
 			if (addTokens) {
 				const last = _.last(circulationArray)
@@ -99,8 +99,10 @@ const cards = {
 			}
 		}
 	},
-	breakdown: (total, percents, counts) => {
-		const count = total || Reservations.total()
+	breakdown: (total = undefined, percents, counts) => {
+		// Make sure we can still pass 0 through
+		const count = total == undefined ? Reservations.total() : total
+
 		const breakdown = percents || {
 			blue: 0.6582,
 			ruby: 0.2488,
@@ -184,7 +186,7 @@ const cards = {
 		// Get the actual breakdowns per month
 		// NOTE: I HATE that this is hardcoded like this, boo, but... time is important here
 		const breakdowns = {
-			initial: cards.breakdown(Reservations.total(), breakdownPercents.initial, {
+			initial: cards.breakdown(0, breakdownPercents.initial, {
 				blue: dynamic ? counts.blue.dynamic.initial : counts.blue.basic,
 				ruby: dynamic ? counts.ruby.dynamic.initial : counts.ruby.basic,
 				silver: dynamic ? counts.silver.dynamic.initial : counts.silver.basic,
@@ -281,7 +283,9 @@ const cards = {
 			blue: 0.6582,
 			ruby: 0.2488,
 			silver: 0.0913,
-			black: 0.0018
+			// black: 0.0018
+			// Setting black to 0 % so we get no new black cards
+			black: 0
 		}
 
 		//
@@ -301,19 +305,26 @@ const cards = {
 			// Grab the last percent
 			const last = _.clone(breakdownPercents[`month${i}`] || initialBreakdown)
 			// Take 10% from silver
-			const moveAmount = (last.silver * 0.10)
+			const silverMoveAmount = (last.silver * 0.10)
+			const blackMoveAmount = (last.black * 0.10)
 			// Split that between blue and ruby (with more favoring free)
 			const percentBlue = last.blue / (last.ruby + last.blue)
 			const percentRuby = last.ruby / (last.ruby + last.blue)
 
-			// Now add them!
 			const current = last
-			last.silver -= moveAmount
-			last.blue += (moveAmount * percentBlue)
-			last.ruby += (moveAmount * percentRuby)
+			// Add the black amount that we took
+			last.black -= blackMoveAmount
+			last.blue += (blackMoveAmount * percentBlue)
+			last.ruby += (blackMoveAmount * percentRuby)
+			// Add the silver amount that we took
+			last.silver -= silverMoveAmount
+			last.blue += (silverMoveAmount * percentBlue)
+			last.ruby += (silverMoveAmount * percentRuby)
 
 			breakdownPercents[`month${i+1}`] = current
 		}
+
+		console.log('breakdownPercents', breakdownPercents)
 
 		return breakdownPercents
 	},
@@ -365,15 +376,16 @@ const cards = {
 	newCardsByMonth: (cardType) => {
 		const percentages = cards.breakdownPercentages(true)
 
-		return _.compact(_.map(Reservations.growth().conservative, (val, key, index) => {
+		return _.reject(_.map(Reservations.growth().conservative, (val, key, index) => {
 			if (key == 'rate') return null;
 			// Get the number of new cards
-			const newCards = key == 'initial' ? Reservations.total() : val
+			const newCards = val
+			console.log('key', val)
 			// Grab the % of this color card in this month
 			const cardPercent = percentages[key][cardType]
 			// Now multiply that times the number of total new cards
 			return newCards * cardPercent
-		}))
+		}), (val) => val == null)
 	},
 
 	//
