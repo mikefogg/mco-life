@@ -1,17 +1,20 @@
 // Data
 import Reservations from './reservations'
+import Daily from './daily'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
 
 const cards = {
+	dynamicAfter: 3,
+
 	tokensTotal: () => {
 		return 31587682
 	},
 	tokensAvailableByMonth: () => {
 		const monthlyCirculation = cards.tokensInCirculationByMonth(true)
-		const lockedUp = _.values(cards.lockup(true, true).total)
+		const lockedUp = _.values(cards.totalTokensByMonth())
 		return _.map(monthlyCirculation, (val, index) => {
 			return val - lockedUp[index]
 		})
@@ -22,6 +25,7 @@ const cards = {
 		// Add tokens each month into circulation
 		const circulationArray = [initial]
 		const addAmount = 0.025 // Add 2.5% each month
+
 		for (var i=0;i<6;i++) {
 			if (addTokens) {
 				const last = _.last(circulationArray)
@@ -42,62 +46,61 @@ const cards = {
 			black: 50000
 		}
 
-		// Set the dynamic monthly reduction
-		const reduction = 0.6;
-
-		return {
+		const dynamicCounts = {
 			blue: {
 				basic: counts.blue,
 				dynamic: {
 					initial: counts.blue,
-					month1: counts.blue,
-					month2: counts.blue,
-					month3: counts.blue,
-					month4: counts.blue,
-					month5: counts.blue,
-					month6: counts.blue
 				}
 			},
 			ruby: {
 				basic: counts.ruby,
 				dynamic: {
-					// Dirty... but effective and easy to read :)
-					initial: counts.ruby,
-					month1: counts.ruby,
-					month2: counts.ruby,
-					month3: counts.ruby,
-					month4: counts.ruby * reduction,
-					month5: counts.ruby * reduction * reduction,
-					month6: counts.ruby * reduction * reduction * reduction
+					initial: counts.ruby
 				}
 			},
 			silver: {
 				basic: counts.silver,
 				dynamic: {
-					// Dirty... but effective and easy to read :)
-					initial: counts.silver,
-					month1: counts.silver,
-					month2: counts.silver,
-					month3: counts.silver,
-					month4: counts.silver * reduction,
-					month5: counts.silver * reduction * reduction,
-					month6: counts.silver * reduction * reduction * reduction
+					initial: counts.silver
 				}
 			},
 			black: {
 				basic: counts.black,
 				dynamic: {
-					// Dirty... but effective and easy to read :)
-					initial: counts.black,
-					month1: counts.black,
-					month2: counts.black,
-					month3: counts.black,
-					month4: counts.black * reduction,
-					month5: counts.black * reduction * reduction,
-					month6: counts.black * reduction * reduction * reduction
+					initial: counts.black
 				}
 			}
 		}
+
+		// Set the dynamic monthly reduction
+		const reduction = 0.2
+
+		_.times(6, (i) => {
+			const month = i + 1
+
+			if (month > cards.dynamicAfter) {
+				// This should be dynamic
+				const afterDynamic = month - cards.dynamicAfter
+				let addition = null
+				_.times(afterDynamic, () => {
+					addition = addition ? addition * reduction : reduction
+				})
+				// Multiply these
+				dynamicCounts['blue'].dynamic[`month${month}`] = counts.blue * addition
+				dynamicCounts['ruby'].dynamic[`month${month}`] = counts.ruby * addition
+				dynamicCounts['silver'].dynamic[`month${month}`] = counts.silver * addition
+				dynamicCounts['black'].dynamic[`month${month}`] = counts.black * addition
+			} else {
+				// This should not be dynamic
+				dynamicCounts['blue'].dynamic[`month${month}`] = counts.blue
+				dynamicCounts['ruby'].dynamic[`month${month}`] = counts.ruby
+				dynamicCounts['silver'].dynamic[`month${month}`] = counts.silver
+				dynamicCounts['black'].dynamic[`month${month}`] = counts.black
+			}
+		})
+
+		return dynamicCounts
 	},
 	breakdown: (total = undefined, percents, counts) => {
 		// Make sure we can still pass 0 through
@@ -305,21 +308,22 @@ const cards = {
 			// Grab the last percent
 			const last = _.clone(breakdownPercents[`month${i}`] || initialBreakdown)
 			// Take 10% from silver
-			const silverMoveAmount = (last.silver * 0.10)
-			const blackMoveAmount = (last.black * 0.10)
+			const percentFromSilver = 0.25
+			const silverMoveAmount = (last.silver * percentFromSilver)
 			// Split that between blue and ruby (with more favoring free)
 			const percentBlue = last.blue / (last.ruby + last.blue)
 			const percentRuby = last.ruby / (last.ruby + last.blue)
 
 			const current = last
-			// Add the black amount that we took
-			last.black -= blackMoveAmount
-			last.blue += (blackMoveAmount * percentBlue)
-			last.ruby += (blackMoveAmount * percentRuby)
+
+			// Add the initial black to the first month
+			if (i == 0) { last.silver += 0.0018 }
+
 			// Add the silver amount that we took
 			last.silver -= silverMoveAmount
 			last.blue += (silverMoveAmount * percentBlue)
 			last.ruby += (silverMoveAmount * percentRuby)
+			//
 
 			breakdownPercents[`month${i+1}`] = current
 		}
@@ -332,8 +336,9 @@ const cards = {
 	// Get the monthly token price
 	monthlyPrices: (addTokens = false) => {
 		const circulationArray = cards.tokensInCirculationByMonth(addTokens)
-		const dynamic = cards.lockup(true, true).total
-		const currentPrice = Reservations.last().price
+		const availableArray = cards.tokensAvailableByMonth()
+		// Average the last 7 days
+		const currentPrice = _.mean(_.takeRight(_.map(Daily, 'price'), 7))
 
 		const prices = {
 			initial: {
@@ -347,24 +352,21 @@ const cards = {
 			month5: {},
 			month6: {},
 		}
+
 		// Grab the months
-		prices.month1.price = prices.initial.marketcap / (circulationArray[1] - dynamic.month1)
-		prices.month1.marketcap = prices.month1.price * circulationArray[1]
+		_.times(6, (i) => {
+			const month = i + 1
 
-		prices.month2.price = prices.month1.marketcap / (circulationArray[2] - dynamic.month2)
-		prices.month2.marketcap = prices.month2.price * circulationArray[2]
+			if (month == 1) {
+				// Make sure the first one is based off the initial amount
+				prices[`month${month}`].price = prices.initial.marketcap / availableArray[month]
+			} else {
+				prices[`month${month}`].price = prices[`month${month-1}`].marketcap / availableArray[month]
 
-		prices.month3.price = prices.month2.marketcap / (circulationArray[3] - dynamic.month3)
-		prices.month3.marketcap = prices.month3.price * circulationArray[3]
+			}
 
-		prices.month4.price = prices.month3.marketcap / (circulationArray[4] - dynamic.month4)
-		prices.month4.marketcap = prices.month4.price * circulationArray[4]
-
-		prices.month5.price = prices.month4.marketcap / (circulationArray[5] - dynamic.month5)
-		prices.month5.marketcap = prices.month5.price * circulationArray[5]
-
-		prices.month6.price = prices.month5.marketcap / (circulationArray[6] - dynamic.month6)
-		prices.month6.marketcap = prices.month6.price * circulationArray[6]
+			prices[`month${month}`].marketcap = prices[`month${month}`].price * circulationArray[month]
+		})
 
 		return prices
 	},
@@ -377,14 +379,18 @@ const cards = {
 		const percentages = cards.breakdownPercentages(true)
 
 		return _.reject(_.map(Reservations.growth().conservative, (val, key, index) => {
-			if (key == 'rate') return null;
+			if (key == 'rate') return null
 			// Get the number of new cards
 			const newCards = val
-			console.log('key', val)
 			// Grab the % of this color card in this month
-			const cardPercent = percentages[key][cardType]
-			// Now multiply that times the number of total new cards
-			return newCards * cardPercent
+			if (cardType) {
+				const cardPercent = percentages[key][cardType]
+				// Now multiply that times the number of total new cards
+				return newCards * cardPercent
+			} else {
+				// Return the total new Cards
+				return newCards
+			}
 		}), (val) => val == null)
 	},
 
@@ -411,6 +417,68 @@ const cards = {
 		})
 
 		return totalCards
+	},
+
+	//
+	// Some calculations for the UI
+	//
+
+	newTokensByMonth: (cardType) => {
+		const cardTypes = ['blue', 'ruby', 'silver', 'black']
+		const totalCardsByMonth = cards.totalCardsByMonth(cardType)
+		const tokenCounts = cards.tokenCounts()
+
+		const totalTokens = {
+			initial: {},
+			month1: {},
+			month2: {},
+			month3: {},
+			month4: {},
+			month5: {},
+			month6: {},
+		}
+
+		// for each of the card types, go get the number of tokens per month
+		_.each(cardTypes, (type, i) => {
+			// Get the card type
+			const totalCardsByMonth = cards.totalCardsByMonth(type)
+			console.log('totalCardsByMonth', type, totalCardsByMonth)
+			// Multiply those tokens by the breakdown percentage...
+			_.each(_.keys(totalTokens), (month, ii) => {
+				// Breakdown percentage
+				const tokens = tokenCounts[type].dynamic[month]
+				// console.log('totalCardsByMonth', totalCardsByMonth)
+				totalTokens[month][type] = totalCardsByMonth[ii] * tokens
+			})
+		})
+
+		const totals = _.map(_.values(totalTokens), (val) => _.sum(_.values(val)))
+
+		return totals
+	},
+
+	//
+	// Some calculations for the UI
+	//
+
+	totalTokensByMonth: (cardType) => {
+		const cardTypes = ['blue', 'ruby', 'silver', 'black']
+
+		const totalTokens = []
+
+		const newTokensByMonth = cards.newTokensByMonth(cardType)
+		_.each(newTokensByMonth, (val, index) => {
+			const prevVal = totalTokens[index-1]
+			if (prevVal) {
+				// Add it if it exists
+				totalTokens.push(val + prevVal)
+			} else {
+				// Create it if it doesnt
+				totalTokens.push(val)
+			}
+		})
+
+		return totalTokens
 	},
 
 	//

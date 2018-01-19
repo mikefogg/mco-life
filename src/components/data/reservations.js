@@ -42,28 +42,32 @@ const reservations = {
 	},
 	growth: () => {
 		// Get the averages
-		const last60 = _.takeRight(DailyData, 60)
-		const first30 = _.sumBy(_.take(last60, 30), (res) => {
-			return res.reservations
-		})
-		const last30 = _.sumBy(_.takeRight(last60, 30), (res) => {
-			return res.reservations
-		})
-		const growth = last30 / first30
-		const initialGrowth = growth - 1
+		const lastFourWeeks = _.takeRight(DailyData, 28)
+		const firstTwo = _.sumBy(_.take(lastFourWeeks, 14), 'reservations')
+		const lastTwo = _.sumBy(_.takeRight(lastFourWeeks, 14), 'reservations')
+		const lastThirty = _.sumBy(_.takeRight(DailyData, 30), 'reservations')
+
+		// const lastMonth = _.takeRight(data, 30)
+		// const twoMonthAvg = _.meanBy(lastTwoWeeks, 'reservations')
+
+		const growth = lastTwo / firstTwo
+		const monthlyGrowth = growth - 1
+
 		// Only use half the distance
 		// const conservativeGrowth = (((last30 - first30) / 2) + first30) / first30
 		// Use 75% of the growth rate (the amount over 100%)
-		const conservativeGrowth = growth  - (0.35 * initialGrowth)
+		// We do this so that we take the initial growth (ex, 150%)
+		// and remove x% of the amount over 100%
+		const conservativeGrowth = growth - (0.25 * monthlyGrowth)
 		// Months
-		const month1 = last30 * growth
+		const month1 = lastThirty * growth
 		const month2 = month1 * growth
 		const month3 = month2 * growth
 		const month4 = month3 * growth
 		const month5 = month4 * growth
 		const month6 = month5 * growth
 		// Conservative
-		const conMonth1 = last30 * conservativeGrowth
+		const conMonth1 = lastThirty * conservativeGrowth
 		const conMonth2 = conMonth1 * conservativeGrowth
 		const conMonth3 = conMonth2 * conservativeGrowth
 		const conMonth4 = conMonth3 * conservativeGrowth

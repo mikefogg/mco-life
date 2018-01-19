@@ -30,7 +30,10 @@ export default {
 		calculations: {
 			newCardsByMonth: (cardType) => Cards.newCardsByMonth(cardType),
 			totalCardsByMonth: (cardType) => Cards.totalCardsByMonth(cardType),
-			usdRequiredByMonth: (cardType) => Cards.usdRequiredByMonth(cardType)
+			usdRequiredByMonth: (cardType) => Cards.usdRequiredByMonth(cardType),
+			newTokensByMonth: (cardType) => Cards.newTokensByMonth(cardType),
+			totalTokensByMonth: (cardType) => Cards.totalTokensByMonth(cardType),
+			breakdownPercentages: Cards.breakdownPercentages(true)
 		}
 	},
 	tokens: {

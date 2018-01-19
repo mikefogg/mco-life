@@ -117,7 +117,7 @@ h1 {
 h2 {
 	margin: 0;
 	padding: 0;
-	font-size: 52px;
+	font-size: 42px;
 	font-weight: 500;
 	line-height: 80px;
 	color: $blue;
@@ -126,7 +126,7 @@ h2 {
 }
 
 p {
-	font-size: 24px;
+	font-size: 18px;
 }
 
 .section {
@@ -166,14 +166,14 @@ p {
 h1 {
 	margin: 0 auto;
 	padding: 20px;
-	max-width: 1200px;
-	font-size: 52px;
+	max-width: 1000px;
+	font-size: 42px;
 	color: rgba(#fff, .60);
 
 	strong {
 		color: #fff;
 		margin: 0 20px;
-		font-size: 58px;
+		font-size: 42px;
 	}
 }
 

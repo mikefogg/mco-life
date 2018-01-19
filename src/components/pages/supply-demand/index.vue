@@ -52,8 +52,13 @@ export default {
 				tokens: {
 					total: _.times(7, (num) => this.formatDecimal(this.recentData.tokens.total)),
 					circulation: _.map(this.recentData.tokens.circulationByMonth, (val) => this.formatDecimal(val)),
-					totalLockedUp: _.map(_.values(this.recentData.cards.lockup.dynamic), (val) => this.formatDecimal(val)),
+					newLockedUp: _.map(this.recentData.cards.calculations.newTokensByMonth(), (val) => this.formatDecimal(val)),
+					totalLockedUp: _.map(this.recentData.cards.calculations.totalTokensByMonth(), (val) => this.formatDecimal(val)),
 					available: _.map(this.recentData.tokens.availableByMonth, (val) => this.formatDecimal(val))
+				},
+				reservations: {
+					new: _.map(this.recentData.cards.calculations.newCardsByMonth(), (val) => this.formatNumeral(val)),
+					total: _.map(this.recentData.cards.calculations.totalCardsByMonth(), (val) => this.formatNumeral(val))
 				},
 				values: {
 					marketcap: _.map(_.values(this.recentData.tokens.monthlyPrices.addedCirculation), (val) => this.formatPrice(val.marketcap)),
@@ -128,6 +133,22 @@ $ruby: #900F24;
 		}
 	}
 
+	tr.price {
+		td {
+			background: $ruby;
+			color: #fff;
+			font-size: 18px;
+		}
+	}
+
+	tr.empty {
+		td {
+			background: #fff;
+			height: 20px;
+			border: 0;
+		}
+	}
+
 	td, th {
 		padding: 5px 10px;
 		border: 1px solid #e2e2e2;
@@ -152,6 +173,8 @@ $ruby: #900F24;
 }
 
 .statement {
+	padding: 60px 0;
+
 	&.advice {
 		font-size: 20px;
 		padding: 20px;
