@@ -49,12 +49,6 @@ export default {
 	created() {
 	},
 	mounted() {
-    // TODO: Move this to global so we don't repeat
-    // Make sure the hero is the correct height
-		this.resizeHero = _.throttle(this.resizeHero, 50)
-		$(window).resize(this.resizeHero)
-		// Call it once
-		this.resizeHero()
 		// Find the chart
 		var ctx = document.getElementById("chart");
     // Get the datasets
@@ -162,16 +156,6 @@ export default {
 		formatPercent: (number) => {
 			return numeral(number).format('0,0.00%')
 		},
-    // Make sure the hero is the right height
-		resizeHero: () => {
-			const windowHeight = $(window).outerHeight()
-			const disclaimerHeight = $('.disclaimer').outerHeight()
-			const navHeight = $('.nav-area').outerHeight()
-			const heroHeight = windowHeight - disclaimerHeight - 40 // for padding
-      // Set the heights
-			$('.section.hero').height(heroHeight)
-			$('.section.hero .header-text-container').height(heroHeight - navHeight)
-		}
 	}
 }
 </script>

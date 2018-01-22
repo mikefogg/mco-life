@@ -93,7 +93,6 @@ html, body {
 .header-text-container {
 	height: 400px;
   display: flex;
-  vertical-align: middle;
   justify-content: center;
   align-items: center;
 }
@@ -134,13 +133,25 @@ p {
 	padding: 20px;
 
 	&.hero {
-		height: 700px;
+		min-height: 600px;
+    height: calc(100vh - 51px - 40px); // 51px – Disclaimer height, 40px – padding
 		background: $blue url('./assets/images/pattern.svg') no-repeat center center;
 	  -webkit-background-size: cover;
 	  -moz-background-size: cover;
 	  -o-background-size: cover;
 	  background-size: cover;
 		background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+      .nav-area {
+        flex: 0 0 auto;
+        min-width: 0;
+      }
+      .header-text-container {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
 	}
 
 	.inner-content {
@@ -272,6 +283,22 @@ h1 {
 		text-decoration: underline;
 		color: rgba(#fff, 0.45);
 	}
+}
+
+@media (min-width: 0px) and (max-width: 600px) {
+  ul.methods {
+    li {
+      margin-bottom: 12px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+    }
+    span {
+      display: block;
+      margin-right: 0;
+      margin-bottom: 6px;
+    }
+  }
 }
 
 </style>
