@@ -96,6 +96,10 @@ export default {
 						{
 							value: 90,
 							label: '$100'
+						},
+						{
+							value: 187,
+							label: '$187'
 						}
 					]
 				}, {
