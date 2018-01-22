@@ -1,3 +1,10 @@
+//
+// This is the card calculation magic. It holds all of the math behind how we're
+// calculating all the things. The main function is the bottom one `rowsByMonths`.
+// I tried to comment in there as much as I could so you could see what's going on
+// and how we landed here ~ @mikefogg
+//
+
 // Data
 import Daily from './daily'
 // Helpers
@@ -6,9 +13,6 @@ import numeral from 'numeral'
 import moment from 'moment'
 
 const cards = {
-	dynamicAfter: 3,
-	dynamicReductionAmount: 0.28,
-	annualCardsTotal: 1000000,
 	tokensExist: 31587682,
 	tokenAmounts: {
 		blue: 0,
@@ -57,7 +61,6 @@ const cards = {
 			// Setting black to 0 % so we get no new black cards
 			black: 0
 		}
-
 		const breakdownPercents = {
 			initial: initialBreakdown
 		}
@@ -70,24 +73,21 @@ const cards = {
 			}
 			// Grab the last percent
 			const last = _.clone(breakdownPercents[`month${i}`] || initialBreakdown)
-			// Take 10% from silver
+			// Take 25% from silver
 			const percentFromSilver = 0.25
 			const silverMoveAmount = (last.silver * percentFromSilver)
 			// Split that between blue and ruby (with more favoring free)
 			const percentBlue = last.blue / (last.ruby + last.blue)
 			const percentRuby = last.ruby / (last.ruby + last.blue)
-
+			// Since we want to update the last one, snag that
 			const current = last
-
-			// Add the initial black to the first month
+			// Add the initial black to the first month of silver
 			if (i == 0) { last.silver += 0.0018 }
-
-			// Add the silver amount that we took
+			// Add the silver amount that we took to ruby and blue
 			last.silver -= silverMoveAmount
 			last.blue += (silverMoveAmount * percentBlue)
 			last.ruby += (silverMoveAmount * percentRuby)
-			//
-
+			// And now set that on the correct month
 			breakdownPercents[`month${i+1}`] = current
 		}
 
@@ -96,6 +96,10 @@ const cards = {
 
 	//
 	// Figure out a row by month
+	// This is the majority of the logic
+	// NOTE: I built it so you can also pass in an `annualCardsTotal` amount
+	// that could be used instead of a percentage. I didn't implement the code
+	// yet to actually allow you to change it on the front end, so stay tuned.
 	//
 
 	rowsByMonths: (monthCount = 7, params = {}) => {
@@ -260,7 +264,7 @@ const cards = {
 		// Add row items for each month
 		_.each(months, (month) => {
 			// Tokens
-			result.tokens.exist.push(cards.tokensExist)
+			result.tokens.exist.push(settings.tokensExist)
 			result.tokens.newLockup.push(month.tokens.newLockup)
 			result.tokens.totalLockup.push(month.tokens.totalLockup)
 			result.tokens.circulation.push(month.tokens.circulation)

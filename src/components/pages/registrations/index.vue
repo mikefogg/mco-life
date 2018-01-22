@@ -3,7 +3,7 @@
 <script>
 // Partials
 import Navigation from '@/components/elements/partials/navigation'
-// Pull in the daily data
+// Data
 import DailyData from '@/components/data/daily'
 // Helpers
 import _ from 'lodash'
@@ -52,11 +52,10 @@ export default {
     // TODO: Move this to global so we don't repeat
     // Make sure the hero is the correct height
 		this.resizeHero = _.throttle(this.resizeHero, 50)
-		$(window).resize(this.resizeHero);
+		$(window).resize(this.resizeHero)
 		// Call it once
 		this.resizeHero()
-
-		// Build the chart
+		// Find the chart
 		var ctx = document.getElementById("chart");
     // Get the datasets
 		const validData = _.filter(DailyData, (day) => { return !day.ignore })
@@ -64,8 +63,6 @@ export default {
 		const reservationLabels = _.map(validData, 'date')
 		const priceData = _.map(validData, 'price')
 		const priceLabels = _.map(validData, 'date')
-
-
     // Build the chart
 		var myChart = new Chart(ctx, {
 			type: 'line',

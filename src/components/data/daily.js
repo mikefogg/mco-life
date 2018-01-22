@@ -1,3 +1,14 @@
+//
+// A daily update of the MCO reservation information is added here
+// Soon this will auto-update, etc. but speed was the name of the game here
+// Also note, since we didn't start tracking until the 23rd of November, we
+// added values before that that matched the daily average pre-tracking so that
+// we could get accurate data 60 days back. As of the 23rd of July, those numbers
+// will no longer be used for comparison. We add the `ignore` in there so we don't
+// count them when calculating our total reservations (since they are included in
+// the `pre-tracking-amount` that we add). ~ @mikefogg
+//
+
 export default [
 	{ date: 'November 10, 2017', reservations: 271, price: 5.9, ignore: true },
 	{ date: 'November 11, 2017', reservations: 271, price: 5.84, ignore: true },
@@ -77,5 +88,7 @@ export default [
 	{ date: 'January 18, 2018', reservations: 585, price: 11.46	},
 	{ date: 'January 19, 2018', reservations: 610, price: 12.04	},
 	{ date: 'January 20, 2018', reservations: 541, price: 12.92	},
+
+	{ date: 'January 21, 2018', reservations: 537, price: 13.23	},
 
 ]

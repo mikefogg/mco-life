@@ -175,10 +175,6 @@ export default {
 							value: 0.1,
 							label: '90%'
 						},
-						{
-							value: 0.0,
-							label: '100%'
-						},
 					]
 				}, {
 					name: 'MCO Added To Circulation Monthly',
@@ -458,7 +454,7 @@ p.note {
 	a {
 		display: inline-block;
 		padding: 10px 20px;
-		margin-right: 10px;
+		margin: 0 10px 10px 0;
 		font-size: 12px;
 		border: 1px solid #d2d2d2;
 		border-radius: 3px;
