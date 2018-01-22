@@ -1,0 +1,267 @@
+//
+// Common styles that will affect all pages
+// NOTE: Component specific files should go inside each component's
+// .vue file.
+//
+
+html,
+body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+
+#app {
+	color: #fff;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-weight: 600;
+	text-align: center;
+}
+
+.disclaimer {
+	padding: 14px 20px;
+	background: lighten($blue, 10);
+	border-bottom: 1px solid $blue;
+	color: #fff;
+	text-align: center;
+
+	strong {
+		margin: 0 6px;
+	}
+
+	a {
+		margin: 0 10px;
+		color: #fff;
+		text-decoration: underline;
+	}
+}
+
+//
+// Header
+//
+
+.logo {
+	padding: 20px 0;
+	font-size: 40px;
+}
+
+.header-text-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 400px;
+}
+
+//
+// Globals
+//
+
+a {
+	color: lighten($blue, 30);
+	text-decoration: underline;
+}
+
+h1 {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 20px;
+	color: rgba(#fff, 0.60);
+	font-size: 42px;
+	font-weight: 500;
+	line-height: 80px;
+
+	strong {
+		margin: 0 20px;
+		color: #fff;
+		font-size: 42px;
+	}
+}
+
+h2 {
+	margin: 0;
+	padding: 0;
+	border-bottom: 4px solid $ruby;
+	color: $blue;
+	font-size: 42px;
+	font-weight: 500;
+	line-height: 80px;
+	text-align: left;
+}
+
+p {
+	font-size: 18px;
+}
+
+//
+// Common sections
+//
+
+.section {
+	position: relative;
+	padding: 20px;
+
+	&.hero {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		height: calc(100vh - 51px - 40px); // 51px – Disclaimer height, 40px – padding
+		min-height: 600px;
+		background: $blue url('./assets/images/pattern.svg') no-repeat center center;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		-webkit-background-size: cover;
+		background-size: cover;
+
+		.nav-area {
+			flex: 0 0 auto;
+			min-width: 0;
+		}
+		.header-text-container {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+
+	.inner-content {
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+}
+
+//
+// Footer
+//
+
+.contact {
+	padding: 60px 40px;
+	background-color: $blue;
+	color: #fff;
+	text-align: center;
+
+	.label {
+		font-size: 40px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.buttons {
+		margin: 40px 0 0;
+		padding: 0;
+		font-size: 14px;
+		list-style: none;
+
+		li {
+			display: inline-block;
+
+			a {
+				display: inline-block;
+				padding: 20px 40px;
+				background: #fff;
+				border-radius: 40px;
+				color: $blue;
+				font-size: 24px;
+				text-decoration: none;
+
+				&:hover {
+					background: rgba(#fff, 0.9);
+				}
+			}
+		}
+
+		span {
+			margin-right: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+}
+
+.donations {
+	padding: 60px 40px;
+	background: darken($blue, 10);
+	color: #fff;
+	text-align: center;
+
+	.label {
+		font-size: 24px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.methods {
+		margin: 20px 0 0;
+		padding: 0;
+		font-size: 14px;
+		list-style: none;
+
+		span {
+			margin-right: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+}
+
+.built-by {
+	padding: 20px;
+	background: darken($blue, 10);
+	border-top: 1px solid rgba(#fff, 0.05);
+	color: rgba(#fff, 0.35);
+	font-size: 14px;
+	text-align: center;
+
+	span,
+	strong {
+		margin: 0 5px;
+		color: rgba(#fff, 0.45);
+	}
+
+	a {
+		color: rgba(#fff, 0.45);
+		text-decoration: underline;
+	}
+}
+
+//
+// Responsive
+//
+
+@media (min-width: 0px) and (max-width: 600px) {
+	.section.hero {
+		h1 {
+			margin: 0;
+			padding: 0;
+			font-size: 32px;
+			font-weight: 500;
+			line-height: 40px;
+
+			strong {
+				margin: 0 8px;
+				font-size: 32px;
+			}
+		}
+	}
+
+	ul.methods {
+		li {
+			margin-bottom: 12px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+		span {
+			display: block;
+			margin-right: 0;
+			margin-bottom: 6px;
+		}
+	}
+}

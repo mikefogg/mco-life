@@ -180,27 +180,4 @@ export default {
 		height: 800px;
 	}
 }
-
-//
-// Responsive
-// TODO: Global
-//
-
-@media (min-width: 0px) and (max-width: 600px) {
-	.section.hero {
-		h1 {
-			margin: 0;
-			padding: 0;
-			font-size: 32px;
-			font-weight: 500;
-			line-height: 40px;
-
-			strong {
-				font-size: 32px;
-				margin: 0 8px;
-			}
-		}
-	}
-}
-
 </style>
