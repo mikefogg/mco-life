@@ -5,11 +5,11 @@
 		.header-text-container
 			h1
 				| As of
-				strong {{recentData.reservations.last.date}}
+				strong {{lastDay.date}}
 				| we've averaged
-				strong {{formatNumeral(recentData.reservations.thirtyDays.average)}}
+				strong {{formatNumeral(lastThirtyDaysAverage)}}
 				| reservations per day in the last thirty days! That's
-				strong {{formatNumeral(recentData.reservations.total)}}
+				strong {{formatNumeral(totalReservations)}}
 				| total. Crazy.
 	
 	.section.chart

@@ -3,27 +3,50 @@
 <script>
 // Partials
 import Navigation from '@/components/elements/partials/navigation'
-// Data
-import RecentData from '@/components/data/recent'
+// Pull in the daily data
+import DailyData from '@/components/data/daily'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
-import Chart from 'chart.js';
-import $ from 'jquery';
+import moment from 'moment'
+import Chart from 'chart.js'
+import $ from 'jquery'
 
 export default {
 	name: 'RegistrationsPage',
 	data () {
 		return {
-			recentData: {}
+		}
+	},
+	computed: {
+		lastDay: function() {
+			const data = _.last(DailyData)
+			return {
+				date: moment(data.date).format('MMMM Do, YYYY'),
+				count: data.reservations,
+				price: data.price // ).format('$0,0.00')
+			}
+		},
+		totalReservations: function() {
+			const days = _.filter(DailyData, (d) => { return !d.ignore })
+			const newCount = _.sumBy(days, 'reservations')
+			// initial tracking amount
+			const initialTracking = 26675
+			return newCount + initialTracking
+		},
+		lastThirtyDaysAverage: function() {
+			// Get the averages
+			const reservations = _.meanBy(_.takeRight(DailyData, 30), (res) => {
+				return res.reservations
+			})
+			// Return them sexily
+			return reservations
 		}
 	},
 	components: {
 		'navigation': Navigation
 	},
 	created() {
-    // Store the recent data so we calculate it once
-		this.recentData = RecentData
 	},
 	mounted() {
     // TODO: Move this to global so we don't repeat
@@ -36,7 +59,7 @@ export default {
 		// Build the chart
 		var ctx = document.getElementById("chart");
     // Get the datasets
-		const validData = _.filter(this.recentData.daily, (day) => { return !day.ignore })
+		const validData = _.filter(DailyData, (day) => { return !day.ignore })
 		const reservationData = _.map(validData, 'reservations')
 		const reservationLabels = _.map(validData, 'date')
 		const priceData = _.map(validData, 'price')
@@ -70,7 +93,7 @@ export default {
 						'rgba(37, 105, 149, 1.0)',
 					],
 					borderWidth: 2
-				},{
+				}, {
 					label: 'Price (USD)',
 					yAxisID: 'y-axis-1',
 					data: priceData,
@@ -127,7 +150,7 @@ export default {
 					}]
 				}
 			}
-		});
+		})
 	},
 	methods: {
 		formatNumeral: (number) => {
