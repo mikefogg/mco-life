@@ -55,7 +55,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 400px;
-	vertical-align: middle;
 }
 
 //
@@ -107,17 +106,128 @@ p {
 	padding: 20px;
 
 	&.hero {
-		height: 700px;
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		height: calc(100vh - 51px - 40px); // 51px – Disclaimer height, 40px – padding
+		min-height: 600px;
 		background: $blue url('./assets/images/pattern.svg') no-repeat center center;
 		-moz-background-size: cover;
 		-o-background-size: cover;
 		-webkit-background-size: cover;
 		background-size: cover;
+
+		.nav-area {
+			flex: 0 0 auto;
+			min-width: 0;
+		}
+		.header-text-container {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
 	}
 
 	.inner-content {
 		max-width: 1200px;
 		margin: 0 auto;
+	}
+}
+
+//
+// Footer
+//
+
+.contact {
+	padding: 60px 40px;
+	background-color: $blue;
+	color: #fff;
+	text-align: center;
+
+	.label {
+		font-size: 40px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.buttons {
+		margin: 40px 0 0;
+		padding: 0;
+		font-size: 14px;
+		list-style: none;
+
+		li {
+			display: inline-block;
+
+			a {
+				display: inline-block;
+				padding: 20px 40px;
+				background: #fff;
+				border-radius: 40px;
+				color: $blue;
+				font-size: 24px;
+				text-decoration: none;
+
+				&:hover {
+					background: rgba(#fff, 0.9);
+				}
+			}
+		}
+
+		span {
+			margin-right: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+}
+
+.donations {
+	padding: 60px 40px;
+	background: darken($blue, 10);
+	color: #fff;
+	text-align: center;
+
+	.label {
+		font-size: 24px;
+
+		em {
+			margin-left: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+
+	ul.methods {
+		margin: 20px 0 0;
+		padding: 0;
+		font-size: 14px;
+		list-style: none;
+
+		span {
+			margin-right: 10px;
+			color: rgba(#fff, 0.6);
+		}
+	}
+}
+
+.built-by {
+	padding: 20px;
+	background: darken($blue, 10);
+	border-top: 1px solid rgba(#fff, 0.05);
+	color: rgba(#fff, 0.35);
+	font-size: 14px;
+	text-align: center;
+
+	span,
+	strong {
+		margin: 0 5px;
+		color: rgba(#fff, 0.45);
+	}
+
+	a {
+		color: rgba(#fff, 0.45);
+		text-decoration: underline;
 	}
 }
 
@@ -135,9 +245,23 @@ p {
 			line-height: 40px;
 
 			strong {
-				font-size: 32px;
 				margin: 0 8px;
+				font-size: 32px;
 			}
+		}
+	}
+
+	ul.methods {
+		li {
+			margin-bottom: 12px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+		span {
+			display: block;
+			margin-right: 0;
+			margin-bottom: 6px;
 		}
 	}
 }
