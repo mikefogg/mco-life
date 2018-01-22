@@ -6,7 +6,7 @@
 			.navigation
 				ul
 					li: router-link(:to="{ name: 'RegistrationsPage' }") Registrations
-					li: router-link(:to="{ name: 'SupplyDemandPage' }") Token Supply & Demand Prediction
+					li: router-link(:to="{ name: 'SupplyDemandPage' }") Token Supply & Demand Estimator
 					li: router-link(:to="{ name: 'FudPage' }") FUD Responses
 </template>
 

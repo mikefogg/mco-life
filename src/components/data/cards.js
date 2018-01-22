@@ -20,6 +20,7 @@ const cards = {
 		silver: 500,
 		black: 50000
 	},
+	currentPrice: _.mean(_.takeRight(_.map(Daily, 'price'), 7)),
 
 	//
 	// Get the current growth rate in the last 30 days
@@ -116,7 +117,7 @@ const cards = {
 			// Amount we add to the circulation each month
 			monthlyCirculationIncrease: params.monthlyCirculationIncrease || 400000,
 			// Set the initial price
-			initialPrice: params.initialPrice || _.mean(_.takeRight(_.map(Daily, 'price'), 7))
+			initialPrice: params.initialPrice || cards.currentPrice
 		}
 
 		// Set the types of colors

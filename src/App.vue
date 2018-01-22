@@ -194,9 +194,9 @@ h1 {
 
 .contact {
 	padding: 60px 40px;
-	background: $blue;
-	text-align: center;
+	background-color: $blue;
 	color: #fff;
+	text-align: center;
 
 	.label {
 		font-size: 40px;
@@ -210,20 +210,20 @@ h1 {
 	ul.buttons {
 		margin: 40px 0 0;
 		padding: 0;
-		list-style: none;
 		font-size: 14px;
+		list-style: none;
 
 		li {
 			display: inline-block;
 
 			a {
-				background: #fff;
-				color: $blue;
 				display: inline-block;
 				padding: 20px 40px;
+				background: #fff;
 				border-radius: 40px;
-				text-decoration: none;
+				color: $blue;
 				font-size: 24px;
+				text-decoration: none;
 
 				&:hover {
 					background: rgba(#fff, 0.9);
@@ -232,8 +232,8 @@ h1 {
 		}
 
 		span {
-			color: rgba(#fff, 0.6);
 			margin-right: 10px;
+			color: rgba(#fff, 0.6);
 		}
 	}
 }
@@ -241,8 +241,8 @@ h1 {
 .donations {
 	padding: 60px 40px;
 	background: darken($blue, 10);
-	text-align: center;
 	color: #fff;
+	text-align: center;
 
 	.label {
 		font-size: 24px;
@@ -256,32 +256,33 @@ h1 {
 	ul.methods {
 		margin: 20px 0 0;
 		padding: 0;
-		list-style: none;
 		font-size: 14px;
+		list-style: none;
 
 		span {
-			color: rgba(#fff, 0.6);
 			margin-right: 10px;
+			color: rgba(#fff, 0.6);
 		}
 	}
 }
 
 .built-by {
+	padding: 20px;
 	background: darken($blue, 10);
 	border-top: 1px solid rgba(#fff, 0.05);
 	color: rgba(#fff, 0.35);
 	font-size: 14px;
 	text-align: center;
-	padding: 20px;
 
-	span, strong {
+	span,
+	strong {
 		margin: 0 5px;
 		color: rgba(#fff, 0.45);
 	}
 
 	a {
-		text-decoration: underline;
 		color: rgba(#fff, 0.45);
+		text-decoration: underline;
 	}
 }
 

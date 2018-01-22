@@ -27,7 +27,7 @@ export default {
 			// use the growth rate for the last 30 days over the previous 30
 			monthlyGrowthRate: null,
       // Set the initial price
-			initialPrice: _.mean(_.takeRight(_.map(DailyData, 'price'), 7)),
+			initialPrice: Cards.currentPrice,
       // Store the card chart
 			cardChart: null
     }
@@ -55,7 +55,7 @@ export default {
 					values: [
 						{
 							value: _.mean(_.takeRight(_.map(DailyData, 'price'), 7)),
-							label: 'Last 7 Day Average'
+							label: `Last 7 Day Average (${this.formatPrice(Cards.currentPrice)})`
 						},
 						{
 							value: 10,
@@ -361,9 +361,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='scss' scoped>
-$blue: #0D3458;
-$ruby: #900F24;
-
 h2 {
 	margin-top: 40px;
 
@@ -528,28 +525,6 @@ p.note {
 
 	canvas#chart {
 		height: 300px;
-	}
-}
-
-//
-// Responsive
-// TODO: Global
-//
-
-@media (min-width: 0px) and (max-width: 600px) {
-	.section.hero {
-		h1 {
-			margin: 0;
-			padding: 0;
-			font-size: 32px;
-			font-weight: 500;
-			line-height: 40px;
-
-			strong {
-				font-size: 32px;
-				margin: 0 8px;
-			}
-		}
 	}
 }
 </style>
