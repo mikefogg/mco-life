@@ -365,7 +365,7 @@ h2 {
 	margin-top: 40px;
 
 	em {
-		color: $ruby;
+		color: $brand-ruby;
 	}
 
 	&:first-child {
@@ -374,7 +374,7 @@ h2 {
 }
 
 .section.grid {
-	color: $blue;
+	color: $brand-blue;
 	text-align: left;
 	font-size: 14px;
 
@@ -384,14 +384,14 @@ h2 {
 
 	tr.important {
 		td {
-			background: $blue;
+			background: $brand-blue;
 			color: #fff;
 		}
 	}
 
 	tr.price {
 		td {
-			background: $ruby;
+			background: $brand-ruby;
 			color: #fff;
 			font-size: 18px;
 		}
@@ -417,7 +417,7 @@ h2 {
 
 p.note {
 	padding: 10px 20px;
-	background: rgba($ruby, 0.65);
+	background: rgba($brand-ruby, 0.65);
 	color: rgba(#fff, 0.8);
 	border-radius: 3px;
 
@@ -431,6 +431,7 @@ p.note {
 }
 
 .setting-group {
+  margin-bottom: 16px;
 	a {
 		display: inline-block;
 		padding: 10px 20px;
@@ -446,19 +447,19 @@ p.note {
 		}
 
 		&.active, &.active:hover {
-			background: $blue;
+			background: $brand-blue;
 			color: #fff !important;
-			border: 1px solid $blue;
+			border: 1px solid $brand-blue;
 		}
 	}
 }
 
 .section.explaination {
 	text-align: left;
-	color: $blue;
+	color: $brand-blue;
 
 	a {
-		color: lighten($blue, 30);
+		color: lighten($brand-blue, 30);
 
 		&:hover {
 			text-decoration: underline;
@@ -472,32 +473,32 @@ p.note {
 	&.advice {
 		font-size: 20px;
 		padding: 20px;
-		background: rgba($ruby, 0.1);
+		background: rgba($brand-ruby, 0.1);
 		border-radius: 6px;
 	}
 
 	span.ruby {
-		color: $ruby;
+		color: $brand-ruby;
 		margin-right: 10px;
 	}
 }
 
 .answer {
 	padding: 0;
-	color: $ruby;
-	border-left: 4px solid $ruby;
+	color: $brand-ruby;
+	border-left: 4px solid $brand-ruby;
 	padding: 20px;
-	background: rgba($blue, .10);
+	background: rgba($brand-blue, .10);
 	border-radius: 6px;
 
 	ul {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		color: $blue;
+		color: $brand-blue;
 
 		strong {
-			color: $ruby;
+			color: $brand-ruby;
 		}
 
 		&.list {

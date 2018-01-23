@@ -52,5 +52,5 @@ export default {
 
 <style lang='scss'>
 // Import common styles
-@import './assets/styles/common';
+@import './assets/styles/project';
 </style>

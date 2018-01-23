@@ -1,0 +1,59 @@
+// ==========================================================================
+// DONATIONS
+// ==========================================================================
+
+.donations {
+  padding: 60px 40px;
+  background: darken($brand-blue, 10);
+  color: #fff;
+  text-align: center;
+
+  .label {
+    font-size: 24px;
+
+    em {
+      margin-left: 10px;
+      color: rgba(#fff, 0.6);
+    }
+  }
+
+  ul.methods {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 14px;
+
+    span {
+      margin-right: 10px;
+      color: rgba(#fff, 0.6);
+    }
+  }
+}
+
+
+
+//
+// MEDIA QUERY
+// ==========================================================================
+@media (min-width: 0px) and (max-width: 600px) {
+  .donations {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  ul.methods {
+    li {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    span {
+      display: block;
+      margin-right: 0;
+      margin-bottom: 6px;
+    }
+  }
+}

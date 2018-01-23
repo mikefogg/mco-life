@@ -61,7 +61,7 @@ exports.cssLoaders = function (options) {
 		less: generateLoaders('less'),
 		sass: generateLoaders('sass', { indentedSyntax: true }),
 		scss: generateLoaders('sass', {
-			data: "@import '~@/assets/styles/shared/variables';\n",
+			data: "@import '~@/assets/styles/utils/variables';\n",
 		}),
 		stylus: generateLoaders('stylus'),
 		styl: generateLoaders('stylus')

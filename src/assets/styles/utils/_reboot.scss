@@ -1,0 +1,108 @@
+// ==========================================================================
+// REBOOT
+// ==========================================================================
+
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+
+// Make viewport responsive
+// See https://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/.
+@at-root {
+	@-ms-viewport { width: device-width; }
+}
+
+
+html {
+	-ms-overflow-style: scrollbar;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+// Credit: https://github.com/suitcss/base
+[tabindex="-1"]:focus {
+	outline: none !important;
+}
+
+table {
+	border-collapse: collapse;
+	background-color: transparent;
+		th {
+			text-align: left;
+		}
+}
+
+
+img {
+	vertical-align: top;
+}
+
+
+// iOS "clickable elements" fix for role="button"
+//
+// Fixes "clickability" issue (and more generally, the firing of events such as focus as well)
+// for traditionally non-focusable elements with role="button"
+// see https://developer.mozilla.org/en-US/docs/Web/Events/click#Safari_Mobile
+
+[role="button"] {
+	cursor: pointer;
+}
+
+
+// Avoid 300ms click delay on touch devices that support the `touch-action` CSS property.
+//
+// In particular, unlike most other browsers, IE11+Edge on Windows 10 on touch devices and IE Mobile 10-11
+// DON'T remove the click delay when `<meta name="viewport" content="width=device-width">` is present.
+// However, they DO support removing the click delay via `touch-action: manipulation`.
+// See:
+// * https://v4-alpha.getbootstrap.com/content/reboot/#click-delay-optimization-for-touch
+// * http://caniuse.com/#feat=css-touch-action
+// * https://patrickhlauke.github.io/touch/tests/results/#suppressing-300ms-delay
+
+a,
+area,
+button,
+[role="button"],
+input,
+label,
+select,
+summary,
+textarea {
+	touch-action: manipulation;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+	// Remove the default appearance of temporal inputs to avoid a Mobile Safari
+	// bug where setting a custom line-height prevents text from being vertically
+	// centered within the input.
+	// See https://bugs.webkit.org/show_bug.cgi?id=139848
+	// and https://github.com/twbs/bootstrap/issues/11266
+	-webkit-appearance: listbox;
+}
+
+textarea {
+	// Textareas should really only resize vertically so they don't break their (horizontal) containers.
+	resize: vertical;
+}
+
+input[type="search"] {
+	// This overrides the extra rounded corners on search inputs in iOS so that our
+	// `.form-control` class can properly style them. Note that this cannot simply
+	// be added to `.form-control` as it's not specific enough. For details, see
+	// https://github.com/twbs/bootstrap/issues/11586.
+	-webkit-appearance: none;
+}
+
+// Always hide an element with the `hidden` HTML attribute (from PureCSS).
+[hidden] {
+	display: none !important;
+}

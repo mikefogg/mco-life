@@ -1,0 +1,38 @@
+//
+// Variables we use throughout the UI
+// http://sass-lang.com/guide
+//
+
+
+// COLORS
+$brand-blue:                #0d3458;
+$brand-ruby:                #900f24;
+
+
+// BODY
+$body-bg:                   #fff;
+$body-color:                rgba(#000, .87);
+
+
+// LINKS
+$link-color:                lighten($brand-blue, 30);
+$link-decoration:           underline;
+$link-hover-color:          darken($link-color, 15%);
+$link-hover-decoration:     underline;
+
+
+// FONTS
+$font-family-base:          'Avenir', Helvetica, Arial, sans-serif;
+
+$font-size-base:            16px;
+$font-size-paragraph:       18px;
+
+$font-weight-base:          600;
+$font-weight-light:         300;
+$font-weight-bold:          700;
+$font-weight-black:         900;
+
+$line-height-base:          (22px / $font-size-base); // 1.375
+
+$line-height-computed:      $font-size-base * $line-height-base; // 16
+$line-height-paragraph:     27px;
