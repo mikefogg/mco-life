@@ -1,0 +1,77 @@
+// ==========================================================================
+// SECTION
+// ==========================================================================
+
+.section {
+  position: relative;
+  padding: 20px;
+
+  &.hero {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: calc(100vh - 51px); // 51px – Disclaimer height
+    min-height: 600px;
+    background-color: $brand-blue;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-image: url('./assets/images/pattern.svg');
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    .nav-area {
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+
+    .header-text-container {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .inner-content {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+
+//
+// MEDIA QUERY
+// ==========================================================================
+@media (min-width: 0px) and (max-width: 600px) {
+  .section.hero {
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.25;
+      strong {
+        margin: 0 8px;
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+@media (min-width: 0px) and (max-width: 1199px) {
+  .section.hero {
+    height: auto;
+      h1 {
+        line-height: 1.5;
+        padding-bottom: 40px;
+      }
+      .nav-area {
+        margin-bottom: 40px;
+      }
+  }
+}

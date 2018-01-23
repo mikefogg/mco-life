@@ -1,0 +1,24 @@
+// ==========================================================================
+// BUILT BY
+// ==========================================================================
+
+.built-by {
+  padding: 20px;
+  background: darken($brand-blue, 10);
+  border-top: 1px solid rgba(#fff, .05);
+  color: rgba(#fff, .35);
+  font-size: 14px;
+  text-align: center;
+
+  span,
+  strong {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: rgba(#fff, .45);
+  }
+
+  a {
+    color: rgba(#fff, .45);
+    text-decoration: underline;
+  }
+}

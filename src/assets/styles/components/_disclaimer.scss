@@ -1,0 +1,23 @@
+// ==========================================================================
+// DISCLAIMER
+// ==========================================================================
+
+.disclaimer {
+	padding: 14px 20px;
+	background: lighten($brand-blue, 10);
+	border-bottom: 1px solid $brand-blue;
+	color: #fff;
+	text-align: center;
+
+	strong {
+		margin-left: 6px;
+    margin-right: 6px;
+	}
+
+	a {
+		margin-left: 10px;
+    margin-right: 10px;
+		color: #fff;
+		text-decoration: underline;
+	}
+}

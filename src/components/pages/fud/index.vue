@@ -24,17 +24,17 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='scss' scoped>
 a {
-	color: $blue;
+	color: $brand-blue;
 	text-decoration: underline;
 }
 
 .section.fud {
 	text-align: left;
-	color: $blue;
+	color: $brand-blue;
 	font-size: 24px;
 
 	a {
-		color: lighten($blue, 30);
+		color: lighten($brand-blue, 30);
 
 		&:hover {
 			text-decoration: underline;
@@ -60,10 +60,10 @@ a {
 
 	.question {
 		font-size: 32px;
-		color: $ruby;
+		color: $brand-ruby;
 
 		a {
-			color: $ruby;
+			color: $brand-ruby;
 
 			&:hover {
 				text-decoration: none;
@@ -73,20 +73,20 @@ a {
 	.answer {
 		margin-top: 20px;
 		padding: 0;
-		color: $blue;
-		border-left: 4px solid $blue;
+		color: $brand-blue;
+		border-left: 4px solid $brand-blue;
 		padding: 20px;
-		background: rgba($blue, .10);
+		background: rgba($brand-blue, .10);
 		border-radius: 6px;
 
 		ul {
 			list-style: none;
 			margin: 0;
 			padding: 0;
-			color: $blue;
+			color: $brand-blue;
 
 			strong {
-				color: $ruby;
+				color: $brand-ruby;
 			}
 
 			&.list {

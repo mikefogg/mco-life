@@ -1,0 +1,54 @@
+// ==========================================================================
+// SCAFFOLDING
+// ==========================================================================
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $body-color;
+  background-color: $body-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {}
+
+
+
+//
+// LINKS
+// ==========================================================================
+
+a {
+  color: $link-color;
+  text-decoration: $link-decoration;
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+  }
+
+  &:focus {
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+
+
+//
+// LOGO
+// ==========================================================================
+
+.logo {
+  padding: 20px 0;
+  font-size: 40px;
+}
