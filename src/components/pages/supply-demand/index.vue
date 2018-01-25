@@ -415,6 +415,10 @@ h2 {
 	}
 }
 
+.grid-table-wrapper {
+  overflow-x: auto;
+}
+
 p.note {
 	padding: 10px 20px;
 	background: rgba($brand-ruby, 0.65);

@@ -22,7 +22,8 @@ yarn dev
 1. Checkout a branch prefixed with either `feature/your-branch`, `fix/your-brach`, or `hotfix/your-branch` (depending on what type of PR it is)
 1. Make your awesome changes
 1. Make sure your changes are rebased on top of master (`git pull origin master`, `git rebase master`)
-1. Test it out by running `yarn dev` again, just to make sure :) **Since we don't have any tests yet.. this is important.**
+1. Test it out by running `yarn dev` again, just to make sure :)
+1. Run a visual [BackstopJS](https://github.com/garris/BackstopJS) test by running `yarn vtest` (you must run `yarn dev` and `yarn vtest-init` before visual testing). Check that your changes look correct.
 1. Submit your pull request!
 
 Once it's merged into master, I'll:

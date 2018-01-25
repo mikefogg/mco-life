@@ -8,96 +8,97 @@
 				strong MCO
 				| token over the next 6 months.
 				strong This does not include any FOMO.
-	
+
 	.section.grid.explaination
 		.inner-content
 			h2
-				| Supply & Demand Estimation Tool 
+				| Supply & Demand Estimation Tool
 				em (beta)
-			
-			p.statement.advice 
+
+			p.statement.advice
 				span.ruby DISCLAIMER:
-				| ** This is not financial advice. I am a Software Engineer, not a financial advisor. The goal here is to show you how I came to my own prediction. Please... please do your own research. Use everything here as a starting point if you want, but take it as it is -- my prediction. Please send any feedback or bugs to 
+				| ** This is not financial advice. I am a Software Engineer, not a financial advisor. The goal here is to show you how I came to my own prediction. Please... please do your own research. Use everything here as a starting point if you want, but take it as it is -- my prediction. Please send any feedback or bugs to
 				a(href='mailto:mcolife@mikefogg.co') mcolife@mikefogg.co
 				| **
-			
-			table.grid-table
-				thead
-					tr
-						th
-						th(v-for='month in gridRows.months') {{ month }}
-				tbody
-					template(v-for='card in gridRows.cards')
+
+			.grid-table-wrapper
+				table.grid-table
+					thead
+						tr
+							th
+							th(v-for='month in gridRows.months') {{ month }}
+					tbody
+						template(v-for='card in gridRows.cards')
+							tr.important
+								td(:colspan='gridRows.months.length + 1') {{ card.name }}
+							tr
+								td MCO Requirement
+								td(v-for='val in card.mcoPer') {{ formatDecimal(val) }}
+							tr
+								td USD Requirement
+								td(v-for='val in card.usdPer') {{ formatPrice(val) }}
+							tr
+								td New Cards
+								td(v-for='val in card.newCards') {{ formatDecimal(val) }}
+							tr
+								td Total Cards
+								td(v-for='val in card.totalCards') {{ formatDecimal(val) }}
+						tr.empty: td(:colspan='gridRows.months.length + 1')
 						tr.important
-							td(:colspan='gridRows.months.length + 1') {{ card.name }}
+							td(:colspan='gridRows.months.length + 1').important Tokens
 						tr
-							td MCO Requirement
-							td(v-for='val in card.mcoPer') {{ formatDecimal(val) }}
+							td Total
+							td(v-for='val in gridRows.tokens.exist') {{ formatDecimal(val) }}
 						tr
-							td USD Requirement
-							td(v-for='val in card.usdPer') {{ formatPrice(val) }}
+							td Circulation
+							td(v-for='val in gridRows.tokens.circulation') {{ formatDecimal(val) }}
+						tr
+							td New Locked Up
+							td(v-for='val in gridRows.tokens.newLockup') {{ formatDecimal(val) }}
+						tr
+							td Total Locked Up
+							td(v-for='val in gridRows.tokens.totalLockup') {{ formatDecimal(val) }}
+						tr
+							td Available
+							td(v-for='val in gridRows.tokens.available') {{ formatDecimal(val) }}
+						tr.empty: td(:colspan='gridRows.months.length + 1')
+						tr.important
+							td(:colspan='gridRows.months.length + 1') Cards
 						tr
 							td New Cards
-							td(v-for='val in card.newCards') {{ formatDecimal(val) }}
+							td(v-for='val in gridRows.cardCounts.new') {{ formatDecimal(val) }}
 						tr
 							td Total Cards
-							td(v-for='val in card.totalCards') {{ formatDecimal(val) }}
-					tr.empty: td(:colspan='gridRows.months.length + 1')
-					tr.important
-						td(:colspan='gridRows.months.length + 1').important Tokens
-					tr
-						td Total
-						td(v-for='val in gridRows.tokens.exist') {{ formatDecimal(val) }}
-					tr
-						td Circulation
-						td(v-for='val in gridRows.tokens.circulation') {{ formatDecimal(val) }}
-					tr
-						td New Locked Up
-						td(v-for='val in gridRows.tokens.newLockup') {{ formatDecimal(val) }}
-					tr
-						td Total Locked Up
-						td(v-for='val in gridRows.tokens.totalLockup') {{ formatDecimal(val) }}
-					tr
-						td Available
-						td(v-for='val in gridRows.tokens.available') {{ formatDecimal(val) }}
-					tr.empty: td(:colspan='gridRows.months.length + 1')
-					tr.important
-						td(:colspan='gridRows.months.length + 1') Cards
-					tr
-						td New Cards
-						td(v-for='val in gridRows.cardCounts.new') {{ formatDecimal(val) }}
-					tr
-						td Total Cards
-						td(v-for='val in gridRows.cardCounts.total') {{ formatDecimal(val) }}
-					tr.empty: td(:colspan='gridRows.months.length + 1')
-					tr.important
-						td(:colspan='gridRows.months.length + 1') Value
-					tr
-						td Market Cap
-						td(v-for='val in gridRows.values.marketcaps') {{ formatPrice(val) }}
-					tr.price
-						td MCO Value
-						td(v-for='val in gridRows.values.prices') {{ formatPrice(val) }}
-			
+							td(v-for='val in gridRows.cardCounts.total') {{ formatDecimal(val) }}
+						tr.empty: td(:colspan='gridRows.months.length + 1')
+						tr.important
+							td(:colspan='gridRows.months.length + 1') Value
+						tr
+							td Market Cap
+							td(v-for='val in gridRows.values.marketcaps') {{ formatPrice(val) }}
+						tr.price
+							td MCO Value
+							td(v-for='val in gridRows.values.prices') {{ formatPrice(val) }}
+
 			.chart-container
 				canvas#chart(width="800" height="300")
-			
+
 			h2 Custom Configuration
-				
+
 			p.note
-				| NOTE: Until I find a good way to do this programatically... 
-				strong most changes will require you to update the 'Monthly Dynamic MCO Reduction' value 
+				| NOTE: Until I find a good way to do this programatically...
+				strong most changes will require you to update the 'Monthly Dynamic MCO Reduction' value
 				| to make sure the USD amount per card stays about the same after the dynamic reservations kick in.
-				| The default settings are my best predictions, but feel free to modify some of the values here if you disagree :) Also, feel free to ping me 
-				strong @mikef 
+				| The default settings are my best predictions, but feel free to modify some of the values here if you disagree :) Also, feel free to ping me
+				strong @mikef
 				| if you want to be able to customize something else!
-			
+
 			.settings
 				template(v-for='option in settingOptions')
 					h3 {{ option.name }}
 					.setting-group
 						a(v-for='value in option.values' href='#' v-on:click.prevent='setOption(option.key, value.value)' :class='{ active: isOptionActive(option.key, value.value) }') {{ value.label }}
-			
+
 			p.statement.final
 				| I tried to make this extremely conservative so it includes no FOMO, no new features, none of the crazy crypto buzz when something starts to spike... etc...
 				em  And remember, this is just my prediction, feel free to make your own judgements :)
