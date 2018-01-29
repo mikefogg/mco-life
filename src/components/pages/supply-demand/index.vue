@@ -16,46 +16,38 @@ export default {
   name: 'SupplyDemandPage',
   data () {
     return {
-			dynamicAfter: 3,
-			dynamicReductionAmount: 0.6,
-      // monthlyGrowthRateType is whether or not we grow
-			// linearly each month or more month by month
-			monthlyGrowthRateType: 'dynamic',
-			annualCardsTotal: 1000000,
-			monthlyCirculationIncrease: 400000,
-			// Null here and monthlyGrowthRateType `dynamic` will
-			// use the growth rate for the last 30 days over the previous 30
-			monthlyGrowthRate: null,
-      // Set the initial price
-			initialPrice: Cards.currentPrice,
+			loaded: false,
       // Store the card chart
-			cardChart: null
+			cardChart: null,
+      // Store the actual cards logic
+			cardLogic: null,
+      // Store the setting params (defaults)
+			settingValues: {
+				initialPrice: null,
+				monthlyGrowthRate: null,
+				dynamicReductionAmount: 0.6,
+				monthlyCirculationIncrease: 400000
+			}
     }
   },
 	computed: {
 		gridRows: function() {
-			const params = {
-				dynamicAfter: this.dynamicAfter,
-				dynamicReductionAmount: this.dynamicReductionAmount,
-				monthlyGrowthRateType: this.monthlyGrowthRateType,
-				monthlyGrowthRate: this.monthlyGrowthRate,
-				annualCardsTotal: this.annualCardsTotal,
-				monthlyCirculationIncrease: this.monthlyCirculationIncrease,
-				initialPrice: this.initialPrice,
-			}
-
-			return Cards.rowsByMonths(7, params)
+			console.log('testing')
+      // Don't return anything until we're loaded
+			const params = this.settingValues
+			return this.cardLogic.rowsByMonths(7, params)
 		},
 
 		settingOptions: function() {
+			// Don't return anything until we're loaded
 			return [
 				{
 					name: 'Initial MCO Price',
 					key: 'initialPrice',
 					values: [
 						{
-							value: _.mean(_.takeRight(_.map(DailyData, 'price'), 7)),
-							label: `Last 7 Day Average (${this.formatPrice(Cards.currentPrice)})`
+							value: null,
+							label: `Last 7 Day Average (${this.formatPrice(this.cardLogic.initialPrice)})`
 						},
 						{
 							value: 10,
@@ -94,7 +86,7 @@ export default {
 							label: '$90'
 						},
 						{
-							value: 90,
+							value: 100,
 							label: '$100'
 						},
 						{
@@ -108,7 +100,7 @@ export default {
 					values: [
 						{
 							value: null,
-							label: `Current (${this.formatPercent(Cards.currentGrowthRate())})`
+							label: `Current (${this.formatPercent(this.cardLogic.currentGrowthRate)})`
 						},
 						{
 							value: 1,
@@ -315,30 +307,54 @@ export default {
 		'navigation': Navigation
 	},
   created() {
+		// Set the card logic
+		this.cardLogic = Cards
 	},
 	mounted() {
 		// Build the chart
 		var ctx = document.getElementById('chart')
-
-    // Build the chart
+		// Build the chart
 		if (!this.cardChart) {
 			this.cardChart = new Chart(ctx, this.chartData)
 		}
+		// Load the data
+		this.loadData()
 	},
 	watch: {
-    'gridRows.cardCounts.total': function () {
+    'settingValues': function (val) {
+			console.log('gridRows')
       // Set the chart data, then fire update on it
 			this.cardChart.data = this.chartData.data
 			if (this.cardChart) { this.cardChart.update() }
-    }
+    },
   },
 	methods: {
+    // Go get the data from our api
+		loadData: function() {
+			$.get('https://mco-life-api.herokuapp.com/status').then(response => {
+        // Set the token amounts
+				this.cardLogic.tokensExist = response.price.total_supply
+				this.cardLogic.tokensInCirculation = response.price.available_supply
+
+				// Store the days
+				this.cardLogic.daily = response.daily
+
+        // Set the initialprice as the daily avg for last 7 days
+				this.cardLogic.initialPrice = _.mean(_.takeRight(_.map(this.cardLogic.daily, 'price_usd'), 7))
+				this.cardLogic.currentGrowthRate = this.cardLogic.calculateGrowthRate()
+
+        // Tell everything we're loaded
+				this.loaded = true
+			}).catch(error => {
+				console.log('error:', error)
+			})
+		},
     // Set the option value when clicked
 		setOption: function(optionName, value) {
-			this.$set(this, optionName, value)
+			this.$set(this.settingValues, optionName, value)
 		},
 		isOptionActive: function(optionName, value) {
-			return this[optionName] == value
+			return this.settingValues[optionName] == value
 		},
 		formatDecimal: (number) => {
 			return numeral(number).format('0,0.00')
