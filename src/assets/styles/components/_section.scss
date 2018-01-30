@@ -63,6 +63,17 @@
   }
 }
 
+@media (min-width: 0px) and (max-width: 400px) {
+  .section.hero {
+    h1 {
+      font-size: 22px;
+        strong {
+          font-size: 22px;
+        }
+    }
+  }
+}
+
 @media (min-width: 0px) and (max-width: 1199px) {
   .section.hero {
     height: auto;

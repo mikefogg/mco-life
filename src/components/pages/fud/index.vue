@@ -100,4 +100,13 @@ a {
 		}
 	}
 }
+
+@media (min-width: 0px) and (max-width: 600px) {
+  .fud-question {
+  	.question {
+      font-size: 20px;
+    }
+  }
+}
+
 </style>

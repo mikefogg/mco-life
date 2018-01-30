@@ -11,9 +11,12 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "vtest-init": "backstop reference",
+    "vtest": "backstop test || true"
   },
   "dependencies": {
+    "backstopjs": "^3.0.39",
     "chart.js": "^2.7.1",
     "express": "^4.16.2",
     "jquery": "^3.2.1",
