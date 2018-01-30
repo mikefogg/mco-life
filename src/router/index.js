@@ -31,9 +31,11 @@ const router = new Router({
 })
 
 // Add GA
-Vue.use(VueAnalytics, {
-	id: 'UA-112492567-1',
-	router
-})
+if (process.env.NODE_ENV === 'production') {
+	Vue.use(VueAnalytics, {
+		id: 'UA-112492567-1',
+		router
+	})
+}
 
 export default router
