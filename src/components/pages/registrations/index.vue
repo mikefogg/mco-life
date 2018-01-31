@@ -3,8 +3,6 @@
 <script>
 // Partials
 import Navigation from '@/components/elements/partials/navigation'
-// Data
-import DailyData from '@/components/data/daily'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
@@ -16,32 +14,120 @@ export default {
 	name: 'RegistrationsPage',
 	data () {
 		return {
+			loaded: false,
+			cardChart: null,
+			price: {
+				availableSupply: null,
+				totalSupply: null,
+				priceBtc: null,
+				priceUsd: null,
+				rank: null,
+				timestamp: null,
+			},
+			reservations: {
+				today: null,
+				total: null,
+				timestamp: null
+			},
+			daily: null
 		}
 	},
 	computed: {
-		lastDay: function() {
-			const data = _.last(DailyData)
+		updatedAt: function() {
+			return this.reservations.timestamp ? moment(this.reservations.timestamp).calendar() : null
+		},
+		chartData: function() {
+			// Get the datasets
+			const reservationData = _.map(this.daily, 'reservations')
+			const reservationLabels = _.map(this.daily, (day) => moment(day.date).format('MMMM Do, YYYY'))
+			const priceData = _.map(this.daily, (day) => day.price_usd.toFixed(2))
+			const priceLabels = _.map(this.daily, (day) => moment(day.date).format('MMMM Do, YYYY'))
+
 			return {
-				date: moment(data.date).format('MMMM Do, YYYY'),
-				count: data.reservations,
-				price: data.price // ).format('$0,0.00')
+				type: 'line',
+				data: {
+					labels: reservationLabels,
+					datasets: [{
+						label: 'Daily Reservations',
+						yAxisID: 'y-axis-0',
+						data: reservationData,
+	          // Point
+						pointBorderColor: 'rgba(37, 105, 149, 1.0)',
+	          pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
+	          pointHoverBackgroundColor: 'rgba(37, 105, 149, 1.0)',
+	          pointHoverBorderColor: 'rgba(37, 105, 149, 1.0)',
+	          pointBorderWidth: 6,
+	          pointHoverRadius: 8,
+	          pointHoverBorderWidth: 1,
+	          pointRadius: 3,
+	          // Background
+						backgroundColor: [
+							'rgba(37, 105, 149, 0.2)',
+						],
+	          // Border
+						borderColor: [
+							'rgba(37, 105, 149, 1.0)',
+						],
+						borderWidth: 2
+					}, {
+						label: 'Price (USD)',
+						yAxisID: 'y-axis-1',
+						data: priceData,
+	          // Point
+						pointBorderColor: 'rgba(144, 15, 36, 0.15)',
+	          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+	          pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+	          pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
+	          pointBorderWidth: 6,
+	          pointHoverRadius: 8,
+	          pointHoverBorderWidth: 1,
+	          pointRadius: 3,
+	          // Background
+						backgroundColor: [
+							'rgba(144, 15, 36, 0.05)',
+						],
+	          // Border
+						borderColor: [
+							'rgba(144, 15, 36, 0.15)',
+						],
+						borderWidth: 2
+					}]
+				},
+				options: {
+		      responsive: true,
+		      maintainAspectRatio: false,
+					legend: {
+						position: 'bottom'
+					},
+					scales: {
+						xAxes: [{
+							ticks: {
+								autoSkip: true
+							}
+						}],
+						yAxes: [{
+							id: 'y-axis-0',
+							position: 'left',
+							ticks: {
+								beginAtZero:true
+							},
+							gridLines: {
+	              color: 'rgba(37, 105, 149, 0.1)'
+	            }
+						}, {
+							id: 'y-axis-1',
+							position: 'right',
+							ticks: {
+								beginAtZero:true
+							},
+							gridLines: {
+	              color: 'rgba(144, 15, 36, 0.1)'
+	            }
+						}]
+					}
+				}
 			}
 		},
-		totalReservations: function() {
-			const days = _.filter(DailyData, (d) => { return !d.ignore })
-			const newCount = _.sumBy(days, 'reservations')
-			// initial tracking amount
-			const initialTracking = 26675
-			return newCount + initialTracking
-		},
-		lastThirtyDaysAverage: function() {
-			// Get the averages
-			const reservations = _.meanBy(_.takeRight(DailyData, 30), (res) => {
-				return res.reservations
-			})
-			// Return them sexily
-			return reservations
-		}
 	},
 	components: {
 		'navigation': Navigation
@@ -49,101 +135,49 @@ export default {
 	created() {
 	},
 	mounted() {
-		// Find the chart
-		var ctx = document.getElementById("chart");
-    // Get the datasets
-		const validData = _.filter(DailyData, (day) => { return !day.ignore })
-		const reservationData = _.map(validData, 'reservations')
-		const reservationLabels = _.map(validData, 'date')
-		const priceData = _.map(validData, 'price')
-		const priceLabels = _.map(validData, 'date')
-    // Build the chart
-		var myChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: reservationLabels,
-				datasets: [{
-					label: 'Daily Reservations',
-					yAxisID: 'y-axis-0',
-					data: reservationData,
-          // Point
-					pointBorderColor: 'rgba(37, 105, 149, 1.0)',
-          pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-          pointHoverBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-          pointHoverBorderColor: 'rgba(37, 105, 149, 1.0)',
-          pointBorderWidth: 6,
-          pointHoverRadius: 8,
-          pointHoverBorderWidth: 1,
-          pointRadius: 3,
-          // Background
-					backgroundColor: [
-						'rgba(37, 105, 149, 0.2)',
-					],
-          // Border
-					borderColor: [
-						'rgba(37, 105, 149, 1.0)',
-					],
-					borderWidth: 2
-				}, {
-					label: 'Price (USD)',
-					yAxisID: 'y-axis-1',
-					data: priceData,
-          // Point
-					pointBorderColor: 'rgba(144, 15, 36, 0.15)',
-          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-          pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-          pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
-          pointBorderWidth: 6,
-          pointHoverRadius: 8,
-          pointHoverBorderWidth: 1,
-          pointRadius: 3,
-          // Background
-					backgroundColor: [
-						'rgba(144, 15, 36, 0.05)',
-					],
-          // Border
-					borderColor: [
-						'rgba(144, 15, 36, 0.15)',
-					],
-					borderWidth: 2
-				}]
-			},
-			options: {
-	      responsive: true,
-	      maintainAspectRatio: false,
-				legend: {
-					position: 'bottom'
-				},
-				scales: {
-					xAxes: [{
-						ticks: {
-							autoSkip: true
-						}
-					}],
-					yAxes: [{
-						id: 'y-axis-0',
-						position: 'left',
-						ticks: {
-							beginAtZero:true
-						},
-						gridLines: {
-              color: 'rgba(37, 105, 149, 0.1)'
-            }
-					}, {
-						id: 'y-axis-1',
-						position: 'right',
-						ticks: {
-							beginAtZero:true
-						},
-						gridLines: {
-              color: 'rgba(144, 15, 36, 0.1)'
-            }
-					}]
-				}
-			}
-		})
+		// Load the data we need
+		this.loadData()
 	},
+	watch: {
+		loaded: function(loaded) {
+      // Set the chart up if we haven't yet!
+			if (loaded && !this.cardChart) {
+        // Wait until the next dom load
+				this.$nextTick().then(() =>{
+					// Build the chart
+					var ctx = document.getElementById('chart')
+					// Build the chart
+					this.cardChart = new Chart(ctx, this.chartData)
+			  })
+			}
+		}
+  },
 	methods: {
+		// Go get the data from our api
+		loadData: function() {
+			$.get('https://mco-life-api.herokuapp.com/status').then(response => {
+        // Store the prices
+				this.price.availableSupply = response.price.available_supply
+				this.price.totalSupply = response.price.available_supply
+				this.price.priceBtc = response.price.price_btc
+				this.price.priceUsd = response.price.price_usd
+				this.price.rank = response.price.rank
+				this.price.timestamp = response.price.timestamp
+
+				this.reservations.timestamp = response.reservations.timestamp
+				this.reservations.today = response.reservations.today
+				this.reservations.total = response.reservations.total
+
+        // Set the daily amount
+				this.daily = response.daily
+
+        // Tell everything we're loaded
+				this.loaded = true
+			}).catch(error => {
+				console.log('error:', error)
+			})
+		},
+
 		formatNumeral: (number) => {
 			return numeral(number).format('0,0')
 		},

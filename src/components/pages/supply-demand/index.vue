@@ -224,7 +224,7 @@ export default {
 					datasets: [{
 						label: 'Monthly Cards',
 						yAxisID: 'y-axis-0',
-						data: this.gridRows.cardCounts.total,
+						data: _.map(this.gridRows.cardCounts.total, (pr) => pr.toFixed(0)),
 	          // Point
 						pointBorderColor: 'rgba(37, 105, 149, 1.0)',
 	          pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
@@ -246,7 +246,7 @@ export default {
 					}, {
 						label: 'MCO Value (USD)',
 						yAxisID: 'y-axis-1',
-						data: this.gridRows.values.prices,
+						data: _.map(this.gridRows.values.prices, (pr) => pr.toFixed(2)),
 	          // Point
 						pointBorderColor: 'rgba(144, 15, 36, 0.15)',
 	          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
@@ -311,22 +311,32 @@ export default {
 		this.cardLogic = Cards
 	},
 	mounted() {
-		// Build the chart
-		var ctx = document.getElementById('chart')
-		// Build the chart
-		if (!this.cardChart) {
-			this.cardChart = new Chart(ctx, this.chartData)
-		}
-		// Load the data
+    // Load the data we need
 		this.loadData()
 	},
 	watch: {
-    'settingValues': function (val) {
-			console.log('gridRows')
-      // Set the chart data, then fire update on it
-			this.cardChart.data = this.chartData.data
-			if (this.cardChart) { this.cardChart.update() }
+    settingValues: {
+			handler: function(values) {
+				console.log('gridRows')
+	      // Set the chart data, then fire update on it
+				this.cardChart.data = this.chartData.data
+				if (this.cardChart) { this.cardChart.update() }
+			},
+			deep: true
     },
+
+		loaded: function(loaded) {
+      // Set the chart up if we haven't yet!
+			if (loaded && !this.cardChart) {
+        // Wait until the next dom load
+				this.$nextTick().then(() =>{
+					// Build the chart
+					var ctx = document.getElementById('chart')
+					// Build the chart
+					this.cardChart = new Chart(ctx, this.chartData)
+			  })
+			}
+		}
   },
 	methods: {
     // Go get the data from our api
@@ -396,6 +406,12 @@ h2 {
 
 	table {
 		width: 100%;
+		opacity: 0;
+		transition: opacity .6s;
+
+		&.loaded {
+			opacity: 1.0;
+		}
 	}
 
 	tr.important {
