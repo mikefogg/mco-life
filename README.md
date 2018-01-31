@@ -61,6 +61,10 @@ Ooooh where to begin.
 1. Code Cleanup / Bug fixes / whatever else we come up with
 1. Tests, obviously
 
+## Amazing contributors (and fellow believers)
+
+[@sashamorozov](https://github.com/sashamorozov) - Doing some awesome work with styling and UI testing!
+
 ## Where to find me
 
 **Monaco Slack**: **@mfogg** (Request access at [contact@mona.co](contact@mona.co))

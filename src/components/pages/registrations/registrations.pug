@@ -2,18 +2,32 @@
 	.section.hero
 		navigation
 		
-		.header-text-container
-			h1
-				| As of
-				strong {{lastDay.date}}
-				| we've averaged
-				strong {{formatNumeral(lastThirtyDaysAverage)}}
-				| reservations per day in the last thirty days! That's
-				strong {{formatNumeral(totalReservations)}}
-				| total. Crazy.
+		.header-text-container.bold
+			.loading-indicator(v-if='!loaded')
+				div.spinner-white
+					div
+					div
+					div
+			
+			transition(name='fade')
+				.slow-loader(v-if='loaded')
+					h2: strong Total Card Reservations
+					h1
+						strong {{formatNumeral(reservations.total)}}
+					h3 Updated {{updatedAt}}
 	
 	.section.chart
 		.inner-content
 			h2 Registrations Per Day
-			.chart-container
-				canvas#chart(width="800" height="600")
+			
+			.loading-indicator(v-if='!loaded')
+				div.spinner-ruby
+					div
+					div
+					div
+			
+			transition(name='fade')
+				.slow-loader(v-if='loaded')
+			
+					.chart-container
+						canvas#chart(width="800" height="600")

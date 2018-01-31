@@ -3,11 +3,12 @@
 // ==========================================================================
 
 // Vendors
-@import "../../../node_modules/normalize.css/normalize";
+@import '../../../node_modules/normalize.css/normalize';
 
 // Variables
 @import 'utils/variables';
 @import 'utils/reboot';
+@import 'utils/spinners';
 
 // Base
 @import 'base/module';

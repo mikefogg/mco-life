@@ -16,46 +16,42 @@ export default {
   name: 'SupplyDemandPage',
   data () {
     return {
-			dynamicAfter: 3,
-			dynamicReductionAmount: 0.6,
-      // monthlyGrowthRateType is whether or not we grow
-			// linearly each month or more month by month
-			monthlyGrowthRateType: 'dynamic',
-			annualCardsTotal: 1000000,
-			monthlyCirculationIncrease: 400000,
-			// Null here and monthlyGrowthRateType `dynamic` will
-			// use the growth rate for the last 30 days over the previous 30
-			monthlyGrowthRate: null,
-      // Set the initial price
-			initialPrice: Cards.currentPrice,
+			loaded: false,
       // Store the card chart
-			cardChart: null
+			cardChart: null,
+      // Store the actual cards logic
+			cardLogic: null,
+      // Store the setting params (defaults)
+			settingValues: {
+				initialPrice: null,
+				monthlyGrowthRate: null,
+				dynamicReductionAmount: 0.6,
+				monthlyCirculationIncrease: 400000
+			}
     }
   },
 	computed: {
+		apiResponse: function() {
+			return this.$store.state.apiResponse
+		},
+		
 		gridRows: function() {
-			const params = {
-				dynamicAfter: this.dynamicAfter,
-				dynamicReductionAmount: this.dynamicReductionAmount,
-				monthlyGrowthRateType: this.monthlyGrowthRateType,
-				monthlyGrowthRate: this.monthlyGrowthRate,
-				annualCardsTotal: this.annualCardsTotal,
-				monthlyCirculationIncrease: this.monthlyCirculationIncrease,
-				initialPrice: this.initialPrice,
-			}
-
-			return Cards.rowsByMonths(7, params)
+			console.log('testing')
+      // Don't return anything until we're loaded
+			const params = this.settingValues
+			return this.cardLogic.rowsByMonths(7, params)
 		},
 
 		settingOptions: function() {
+			// Don't return anything until we're loaded
 			return [
 				{
 					name: 'Initial MCO Price',
 					key: 'initialPrice',
 					values: [
 						{
-							value: _.mean(_.takeRight(_.map(DailyData, 'price'), 7)),
-							label: `Last 7 Day Average (${this.formatPrice(Cards.currentPrice)})`
+							value: null,
+							label: `Last 7 Day Average (${this.formatPrice(this.cardLogic.initialPrice)})`
 						},
 						{
 							value: 10,
@@ -94,7 +90,7 @@ export default {
 							label: '$90'
 						},
 						{
-							value: 90,
+							value: 100,
 							label: '$100'
 						},
 						{
@@ -108,7 +104,7 @@ export default {
 					values: [
 						{
 							value: null,
-							label: `Current (${this.formatPercent(Cards.currentGrowthRate())})`
+							label: `Current (${this.formatPercent(this.cardLogic.currentGrowthRate)})`
 						},
 						{
 							value: 1,
@@ -232,7 +228,7 @@ export default {
 					datasets: [{
 						label: 'Monthly Cards',
 						yAxisID: 'y-axis-0',
-						data: this.gridRows.cardCounts.total,
+						data: _.map(this.gridRows.cardCounts.total, (pr) => pr.toFixed(0)),
 	          // Point
 						pointBorderColor: 'rgba(37, 105, 149, 1.0)',
 	          pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
@@ -254,7 +250,7 @@ export default {
 					}, {
 						label: 'MCO Value (USD)',
 						yAxisID: 'y-axis-1',
-						data: this.gridRows.values.prices,
+						data: _.map(this.gridRows.values.prices, (pr) => pr.toFixed(2)),
 	          // Point
 						pointBorderColor: 'rgba(144, 15, 36, 0.15)',
 	          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
@@ -315,30 +311,76 @@ export default {
 		'navigation': Navigation
 	},
   created() {
+		// Set the card logic
+		this.cardLogic = Cards
 	},
 	mounted() {
-		// Build the chart
-		var ctx = document.getElementById('chart')
-
-    // Build the chart
-		if (!this.cardChart) {
-			this.cardChart = new Chart(ctx, this.chartData)
-		}
+    // Load the data we need
+		this.loadData()
 	},
 	watch: {
-    'gridRows.cardCounts.total': function () {
-      // Set the chart data, then fire update on it
-			this.cardChart.data = this.chartData.data
-			if (this.cardChart) { this.cardChart.update() }
-    }
+    settingValues: {
+			handler: function(values) {
+				console.log('gridRows')
+	      // Set the chart data, then fire update on it
+				this.cardChart.data = this.chartData.data
+				if (this.cardChart) { this.cardChart.update() }
+			},
+			deep: true
+    },
+
+		loaded: function(loaded) {
+      // Set the chart up if we haven't yet!
+			if (loaded && !this.cardChart) {
+        // Wait until the next dom load
+				this.$nextTick().then(() =>{
+					// Build the chart
+					var ctx = document.getElementById('chart')
+					// Build the chart
+					this.cardChart = new Chart(ctx, this.chartData)
+			  })
+			}
+		}
   },
 	methods: {
+		// Go get the data from our api (or use the existing one)
+		loadData: function() {
+			if (this.apiResponse) {
+        // We have it already! Use that
+				this.handleApiResponse(this.apiResponse)
+			} else {
+				// We need it, so now let's store and use the json response
+				$.get('https://mco-life-api.herokuapp.com/status').then(response => {
+					this.$store.commit('apiResponse', response)
+					this.handleApiResponse(this.apiResponse)
+				}).catch(error => {
+					console.log('error:', error)
+				})
+			}
+		},
+
+    // Actually handle the api response and set it
+		handleApiResponse: function(response) {
+			// Set the token amounts
+			this.cardLogic.tokensExist = response.price.total_supply
+			this.cardLogic.tokensInCirculation = response.price.available_supply
+
+			// Store the days
+			this.cardLogic.daily = response.daily
+
+			// Set the initialprice as the daily avg for last 7 days
+			this.cardLogic.initialPrice = _.mean(_.takeRight(_.map(this.cardLogic.daily, 'price_usd'), 7))
+			this.cardLogic.currentGrowthRate = this.cardLogic.calculateGrowthRate()
+
+			// Tell everything we're loaded
+			this.loaded = true
+		},
     // Set the option value when clicked
 		setOption: function(optionName, value) {
-			this.$set(this, optionName, value)
+			this.$set(this.settingValues, optionName, value)
 		},
 		isOptionActive: function(optionName, value) {
-			return this[optionName] == value
+			return this.settingValues[optionName] == value
 		},
 		formatDecimal: (number) => {
 			return numeral(number).format('0,0.00')
@@ -380,6 +422,12 @@ h2 {
 
 	table {
 		width: 100%;
+		opacity: 0;
+		transition: opacity .6s;
+
+		&.loaded {
+			opacity: 1.0;
+		}
 	}
 
 	tr.important {

@@ -5,29 +5,37 @@
 // and how we landed here ~ @mikefogg
 //
 
-// Data
-import Daily from './daily'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
 
 const cards = {
+	daily: [],
 	tokensExist: 31587682,
+	tokensInCirculation: 13195542,
+	dynamicAfter: 3,
+	dynamicReductionAmount: 0.6,
+	monthlyGrowthRateType: 'dynamic',
+	monthlyGrowthRate: null,
+	annualCardsTotal: 1000000,
+	monthlyCirculationIncrease: 400000,
+	initialPrice: 0,
+	currentGrowthRate: 0,
+
 	tokenAmounts: {
 		blue: 0,
 		ruby: 50,
 		silver: 500,
 		black: 50000
 	},
-	currentPrice: _.mean(_.takeRight(_.map(Daily, 'price'), 7)),
 
 	//
 	// Get the current growth rate in the last 30 days
 	//
 
-	currentGrowthRate: () => {
-		const last60 = _.takeRight(Daily, 60)
+	calculateGrowthRate: () => {
+		const last60 = _.takeRight(cards.daily, 60)
 		const first30 = _.sumBy(_.take(last60, 30), 'reservations')
 		const last30 = _.sumBy(_.takeRight(last60, 30), 'reservations')
 		return last30 / first30
@@ -38,7 +46,7 @@ const cards = {
 	//
 
 	tokensInCirculationByMonth: (addAmount) => {
-		const initial = 13195542
+		const initial = cards.tokensInCirculation
 		// Add tokens each month into circulation
 		const circulationArray = [initial]
 		for (var i=0;i<6;i++) {
@@ -106,18 +114,18 @@ const cards = {
 	rowsByMonths: (monthCount = 7, params = {}) => {
 		// Default params
 		const settings = {
-			dynamicAfter: params.dynamicAfter || 3,
-			dynamicReductionAmount: params.dynamicReductionAmount || 0.28,
-			annualCardsTotal: params.annualCardsTotal || 1000000,
-			tokensExist: params.tokensExist || 31587682,
-			monthlyGrowthRateType: params.monthlyGrowthRateType || 'static',
+			dynamicAfter: params.dynamicAfter || cards.dynamicAfter,
+			dynamicReductionAmount: params.dynamicReductionAmount || cards.dynamicReductionAmount,
+			annualCardsTotal: params.annualCardsTotal || cards.annualCardsTotal,
+			tokensExist: params.tokensExist || cards.tokensExist,
+			monthlyGrowthRateType: params.monthlyGrowthRateType || cards.monthlyGrowthRateType,
 			// Null here and monthlyGrowthRateType `dynamic` will
 			// use the growth rate for the last 30 days over the previous 30
-			monthlyGrowthRate: params.monthlyGrowthRate || null,
+			monthlyGrowthRate: params.monthlyGrowthRate || cards.monthlyGrowthRate,
 			// Amount we add to the circulation each month
-			monthlyCirculationIncrease: params.monthlyCirculationIncrease || 400000,
+			monthlyCirculationIncrease: params.monthlyCirculationIncrease || cards.monthlyCirculationIncrease,
 			// Set the initial price
-			initialPrice: params.initialPrice || cards.currentPrice
+			initialPrice: params.initialPrice || cards.initialPrice
 		}
 
 		// Set the types of colors
@@ -134,8 +142,8 @@ const cards = {
 		let monthlyTotals = []
 		if (settings.monthlyGrowthRateType == 'dynamic') {
 			// Find the current growth rate
-			const last30 = _.sumBy(_.takeRight(Daily, 30), 'reservations')
-			const growthRate = settings.monthlyGrowthRate || cards.currentGrowthRate()
+			const last30 = _.sumBy(_.takeRight(cards.daily, 30), 'reservations')
+			const growthRate = settings.monthlyGrowthRate || cards.currentGrowthRate
 			// Add the initial value in there as 0 regardless
 			monthlyTotals.push(0)
 			// Add the remaining months
