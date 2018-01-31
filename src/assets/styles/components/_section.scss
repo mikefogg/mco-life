@@ -55,7 +55,7 @@
 					margin-top: 20px;
 					margin-bottom: 0;
 					border-bottom: 0;
-					color: rgba(#fff, .60);
+					color: rgba(#fff, 0.60);
 					font-size: 14px;
 					font-weight: normal;
 				}
@@ -88,6 +88,26 @@
 				font-size: 32px;
 			}
 		}
+
+		.header-text-container.bold {
+			h1 {
+				margin: 0;
+				padding: 0;
+				font-size: 80px;
+				font-weight: 500;
+				line-height: 1;
+
+				strong {
+					margin: 0 8px;
+					font-size: 80px;
+				}
+			}
+
+			h2 {
+				margin-bottom: 20px;
+				font-size: 14px;
+			}
+		}
 	}
 }
 
@@ -95,9 +115,9 @@
 	.section.hero {
 		h1 {
 			font-size: 22px;
-				strong {
-					font-size: 22px;
-				}
+			strong {
+				font-size: 22px;
+			}
 		}
 	}
 }
