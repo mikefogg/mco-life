@@ -31,6 +31,10 @@ export default {
     }
   },
 	computed: {
+		apiResponse: function() {
+			return this.$store.state.apiResponse
+		},
+		
 		gridRows: function() {
 			console.log('testing')
       // Don't return anything until we're loaded
@@ -339,25 +343,37 @@ export default {
 		}
   },
 	methods: {
-    // Go get the data from our api
+		// Go get the data from our api (or use the existing one)
 		loadData: function() {
-			$.get('https://mco-life-api.herokuapp.com/status').then(response => {
-        // Set the token amounts
-				this.cardLogic.tokensExist = response.price.total_supply
-				this.cardLogic.tokensInCirculation = response.price.available_supply
+			if (this.apiResponse) {
+        // We have it already! Use that
+				this.handleApiResponse(this.apiResponse)
+			} else {
+				// We need it, so now let's store and use the json response
+				$.get('https://mco-life-api.herokuapp.com/status').then(response => {
+					this.$store.commit('apiResponse', response)
+					this.handleApiResponse(this.apiResponse)
+				}).catch(error => {
+					console.log('error:', error)
+				})
+			}
+		},
 
-				// Store the days
-				this.cardLogic.daily = response.daily
+    // Actually handle the api response and set it
+		handleApiResponse: function(response) {
+			// Set the token amounts
+			this.cardLogic.tokensExist = response.price.total_supply
+			this.cardLogic.tokensInCirculation = response.price.available_supply
 
-        // Set the initialprice as the daily avg for last 7 days
-				this.cardLogic.initialPrice = _.mean(_.takeRight(_.map(this.cardLogic.daily, 'price_usd'), 7))
-				this.cardLogic.currentGrowthRate = this.cardLogic.calculateGrowthRate()
+			// Store the days
+			this.cardLogic.daily = response.daily
 
-        // Tell everything we're loaded
-				this.loaded = true
-			}).catch(error => {
-				console.log('error:', error)
-			})
+			// Set the initialprice as the daily avg for last 7 days
+			this.cardLogic.initialPrice = _.mean(_.takeRight(_.map(this.cardLogic.daily, 'price_usd'), 7))
+			this.cardLogic.currentGrowthRate = this.cardLogic.calculateGrowthRate()
+
+			// Tell everything we're loaded
+			this.loaded = true
 		},
     // Set the option value when clicked
 		setOption: function(optionName, value) {

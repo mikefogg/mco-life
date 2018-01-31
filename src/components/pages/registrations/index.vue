@@ -33,9 +33,14 @@ export default {
 		}
 	},
 	computed: {
+		apiResponse: function() {
+			return this.$store.state.apiResponse
+		},
+
 		updatedAt: function() {
 			return this.reservations.timestamp ? moment(this.reservations.timestamp).calendar() : null
 		},
+
 		chartData: function() {
 			// Get the datasets
 			const reservationData = _.map(this.daily, 'reservations')
@@ -153,29 +158,41 @@ export default {
 		}
   },
 	methods: {
-		// Go get the data from our api
+		// Go get the data from our api (or use the existing one)
 		loadData: function() {
-			$.get('https://mco-life-api.herokuapp.com/status').then(response => {
-        // Store the prices
-				this.price.availableSupply = response.price.available_supply
-				this.price.totalSupply = response.price.available_supply
-				this.price.priceBtc = response.price.price_btc
-				this.price.priceUsd = response.price.price_usd
-				this.price.rank = response.price.rank
-				this.price.timestamp = response.price.timestamp
+			if (this.apiResponse) {
+        // We have it already! Use that
+				this.handleApiResponse(this.apiResponse)
+			} else {
+				// We need it, so now let's store and use the json response
+				$.get('https://mco-life-api.herokuapp.com/status').then(response => {
+					this.$store.commit('apiResponse', response)
+					this.handleApiResponse(this.apiResponse)
+				}).catch(error => {
+					console.log('error:', error)
+				})
+			}
+		},
 
-				this.reservations.timestamp = response.reservations.timestamp
-				this.reservations.today = response.reservations.today
-				this.reservations.total = response.reservations.total
+    // Actually handle the api response and set it
+		handleApiResponse: function(response) {
+			// Store the prices
+			this.price.availableSupply = response.price.available_supply
+			this.price.totalSupply = response.price.available_supply
+			this.price.priceBtc = response.price.price_btc
+			this.price.priceUsd = response.price.price_usd
+			this.price.rank = response.price.rank
+			this.price.timestamp = response.price.timestamp
 
-        // Set the daily amount
-				this.daily = response.daily
+			this.reservations.timestamp = response.reservations.timestamp
+			this.reservations.today = response.reservations.today
+			this.reservations.total = response.reservations.total
 
-        // Tell everything we're loaded
-				this.loaded = true
-			}).catch(error => {
-				console.log('error:', error)
-			})
+			// Set the daily amount
+			this.daily = response.daily
+
+			// Tell everything we're loaded
+			this.loaded = true
 		},
 
 		formatNumeral: (number) => {
