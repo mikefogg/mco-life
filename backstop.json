@@ -23,14 +23,16 @@
       "url": "http://localhost:8080/#/",
       "referenceUrl": "http://www.mco.life/#/",
       "onReadyScript": "onReady.js",
-      "selectors": ["document"]
+      "selectors": ["document"],
+      "readySelector": ".slow-loader"
     },
     {
       "label": "Token Supply and Demand",
       "url": "http://localhost:8080/#/supply-and-demand",
       "referenceUrl": "http://www.mco.life/#/supply-and-demand",
       "onReadyScript": "onReady.js",
-      "selectors": ["document"]
+      "selectors": ["document"],
+      "readySelector": ".slow-loader"
     },
     {
       "label": "FUD",
