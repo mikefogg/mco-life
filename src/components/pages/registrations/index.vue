@@ -44,7 +44,7 @@ export default {
 		chartData: function() {
 			// Get the datasets
 			const reservationData = _.map(this.daily, 'reservations')
-			const reservationLabels = _.map(this.daily, (day) => moment(day.date).format('MMMM Do, YYYY'))
+			const reservationLabels = _.map(this.daily, (day) => moment(day.date).format('MMM Do, YYYY'))
 			const priceData = _.map(this.daily, (day) => day.price_usd.toFixed(2))
 			const priceLabels = _.map(this.daily, (day) => moment(day.date).format('MMMM Do, YYYY'))
 
@@ -56,20 +56,20 @@ export default {
 						label: 'Daily Reservations',
 						yAxisID: 'y-axis-0',
 						data: reservationData,
-	          // Point
+						// Point
 						pointBorderColor: 'rgba(37, 105, 149, 1.0)',
-	          pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-	          pointHoverBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-	          pointHoverBorderColor: 'rgba(37, 105, 149, 1.0)',
-	          pointBorderWidth: 6,
-	          pointHoverRadius: 8,
-	          pointHoverBorderWidth: 1,
-	          pointRadius: 3,
-	          // Background
+						pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
+						pointHoverBackgroundColor: 'rgba(37, 105, 149, 1.0)',
+						pointHoverBorderColor: 'rgba(37, 105, 149, 1.0)',
+						pointBorderWidth: 6,
+						pointHoverRadius: 8,
+						pointHoverBorderWidth: 1,
+						pointRadius: 3,
+						// Background
 						backgroundColor: [
 							'rgba(37, 105, 149, 0.2)',
 						],
-	          // Border
+						// Border
 						borderColor: [
 							'rgba(37, 105, 149, 1.0)',
 						],
@@ -78,20 +78,20 @@ export default {
 						label: 'Price (USD)',
 						yAxisID: 'y-axis-1',
 						data: priceData,
-	          // Point
+						// Point
 						pointBorderColor: 'rgba(144, 15, 36, 0.15)',
-	          pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-	          pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-	          pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
-	          pointBorderWidth: 6,
-	          pointHoverRadius: 8,
-	          pointHoverBorderWidth: 1,
-	          pointRadius: 3,
-	          // Background
+						pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+						pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
+						pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
+						pointBorderWidth: 6,
+						pointHoverRadius: 8,
+						pointHoverBorderWidth: 1,
+						pointRadius: 3,
+						// Background
 						backgroundColor: [
 							'rgba(144, 15, 36, 0.05)',
 						],
-	          // Border
+						// Border
 						borderColor: [
 							'rgba(144, 15, 36, 0.15)',
 						],
@@ -99,8 +99,8 @@ export default {
 					}]
 				},
 				options: {
-		      responsive: true,
-		      maintainAspectRatio: false,
+					responsive: true,
+					maintainAspectRatio: false,
 					legend: {
 						position: 'bottom'
 					},
@@ -117,8 +117,8 @@ export default {
 								beginAtZero:true
 							},
 							gridLines: {
-	              color: 'rgba(37, 105, 149, 0.1)'
-	            }
+								color: 'rgba(37, 105, 149, 0.1)'
+							}
 						}, {
 							id: 'y-axis-1',
 							position: 'right',
@@ -126,8 +126,8 @@ export default {
 								beginAtZero:true
 							},
 							gridLines: {
-	              color: 'rgba(144, 15, 36, 0.1)'
-	            }
+								color: 'rgba(144, 15, 36, 0.1)'
+							}
 						}]
 					}
 				}
@@ -145,23 +145,23 @@ export default {
 	},
 	watch: {
 		loaded: function(loaded) {
-      // Set the chart up if we haven't yet!
+			// Set the chart up if we haven't yet!
 			if (loaded && !this.cardChart) {
-        // Wait until the next dom load
+				// Wait until the next dom load
 				this.$nextTick().then(() =>{
 					// Build the chart
 					var ctx = document.getElementById('chart')
 					// Build the chart
 					this.cardChart = new Chart(ctx, this.chartData)
-			  })
+				})
 			}
 		}
-  },
+	},
 	methods: {
 		// Go get the data from our api (or use the existing one)
 		loadData: function() {
 			if (this.apiResponse) {
-        // We have it already! Use that
+				// We have it already! Use that
 				this.handleApiResponse(this.apiResponse)
 			} else {
 				// We need it, so now let's store and use the json response
@@ -174,7 +174,7 @@ export default {
 			}
 		},
 
-    // Actually handle the api response and set it
+		// Actually handle the api response and set it
 		handleApiResponse: function(response) {
 			// Store the prices
 			this.price.availableSupply = response.price.available_supply
@@ -223,12 +223,18 @@ export default {
 
 .chart-container {
 	position: relative;
-	max-height: 800px;
+	height: 800px;
 	padding: 0px;
 	margin-top: 40px;
 
 	canvas#chart {
-		height: 800px;
+		height: 100% !important;
+	}
+}
+
+@media (min-width: 0px) and (max-width: 800px) {
+	.chart-container {
+		height: 600px;
 	}
 }
 </style>
