@@ -24,8 +24,8 @@ export default {
       // Store the setting params (defaults)
 			settingValues: {
 				initialPrice: null,
-				monthlyGrowthRate: null,
-				dynamicReductionAmount: 0.6,
+				monthlyGrowthRate: 1.5,
+				dynamicReductionAmount: 0.7,
 				monthlyCirculationIncrease: 400000
 			}
     }
@@ -34,9 +34,9 @@ export default {
 		apiResponse: function() {
 			return this.$store.state.apiResponse
 		},
-		
+
 		gridRows: function() {
-			console.log('testing')
+			// console.log('testing')
       // Don't return anything until we're loaded
 			const params = this.settingValues
 			return this.cardLogic.rowsByMonths(7, params)
@@ -321,10 +321,12 @@ export default {
 	watch: {
     settingValues: {
 			handler: function(values) {
-				console.log('gridRows')
+
 	      // Set the chart data, then fire update on it
-				this.cardChart.data = this.chartData.data
-				if (this.cardChart) { this.cardChart.update() }
+				if (this.cardChart) {
+          this.cardChart.data = this.chartData.data
+          this.cardChart.update()
+        }
 			},
 			deep: true
     },
@@ -389,7 +391,7 @@ export default {
 			return numeral(number).format('0,0')
 		},
 		formatPrice: (number) => {
-			return numeral(number).format('$0,0.00')
+			return number !== Infinity ? numeral(number).format('$0,0.00') : '–'
 		},
 		formatPriceSmall: (number) => {
 			return numeral(number).format('$0,0')
