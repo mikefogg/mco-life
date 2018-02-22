@@ -195,9 +195,9 @@ const cards = {
 				month.cardCounts.new += newCardsThisMonth
 				// Price in MCO (modified later for dynamic)
 				let mcoPer = cards.tokenAmounts[colorKey]
-				if (i > settings.dynamicAfter && lastMonth) {
+				if (i > settings.dynamicAfter && lastMonth && colorKey === 'ruby') {
 					// Only ruby will be with a dynamic price
-					mcoPer = colorKey === 'ruby' ? lastMonth.cards[colorKey].mcoPer * settings.dynamicReductionAmount : lastMonth.cards[colorKey].mcoPer;
+					mcoPer = lastMonth.cards[colorKey].mcoPer * settings.dynamicReductionAmount
 				}
 				month.cards[colorKey].mcoPer = mcoPer
 			})
