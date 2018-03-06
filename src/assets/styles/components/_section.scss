@@ -32,15 +32,15 @@
 			min-width: 0;
 
 			.left-area {
-				flex: 1;
-				text-align: left;
+				width: 100%;
+				padding: 80px 40px 40px;
 
 				h1 {
-					margin: 0 30px 10px;
+					margin: 0 auto 20px;
 					padding: 0;
 					color: #fff;
 					font: $font-weight-base 52px/60px $font-family-base;
-					text-align: left;
+					text-align: center;
 				}
 
 				h2 {
@@ -49,7 +49,7 @@
 					border: 0;
 					color: rgba(#fff, 0.6);
 					font: $font-weight-base 22px/28px $font-family-base;
-					text-align: left;
+					text-align: center;
 
 					a {
 						color: rgba(#fff, 0.6);
@@ -58,9 +58,9 @@
 			}
 
 			.right-area {
-				flex: 1;
-				margin-right: 30px;
-				margin-bottom: 30px;
+				width: 100%;
+				margin: 0 auto;
+				padding: 0 40px 40px;
 
 				.block {
 					margin-bottom: 20px;

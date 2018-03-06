@@ -260,6 +260,14 @@ export default {
 	text-align: center;
 }
 
+.section.hero {
+	height: auto;
+
+	.header-text-container {
+		display: block;
+	}
+}
+
 .block-title {
 	color: #fff;
 	font: $font-weight-base 18px/26px $font-family-base;
@@ -300,23 +308,4 @@ export default {
 	}
 }
 
-@media (min-width: 0px) and (max-width: 1400px) {
-	.section.hero .header-text-container {
-		flex-direction: column;
-
-		.left-area {
-			padding: 60px 0 0;
-			h1,
-			h2 {
-				text-align: center;
-			}
-		}
-
-		.right-area {
-			width: 100%;
-			margin: 0 auto;
-			padding: 0 40px 40px;
-		}
-	}
-}
 </style>
