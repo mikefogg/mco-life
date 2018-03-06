@@ -22,15 +22,35 @@ a {
 	color: #fff;
 }
 
+.header {
+	height: 80px;
+	padding: 0 30px;
+	display: flex;
+}
+
+.logo {
+	width: 150px;
+	height: 80px;
+	padding: 20px 0;
+	font-size: 40px;
+	line-height: 40px;
+}
+
+.navigation {
+	flex: 1;
+}
+
 ul {
 	margin: 0;
-	padding: 0;
+	padding: 20px 0;
 	list-style: none;
+	line-height: 40px;
+	text-align: right;
 
 	li {
 		display: inline-block;
 		margin: 0 5px;
-		padding: 10px 10px;
+		padding: 0 10px;
 
 		a {
 			color: rgba(#fff, .60);

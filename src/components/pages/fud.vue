@@ -1,4 +1,22 @@
-<template src='./fud.pug' lang='pug'></template>
+<template lang='pug'>
+.fud-page
+	.section.hero
+		navigation
+
+		.header-text-container
+			h1 Answering tough questions about MCO makes us stronger. Answering them repeatedly makes us annoyed. #[strong Feel free to copy & paste]
+
+	.section.fud
+		.inner-content
+			h2 Frequently used FUD
+
+			p.statement For those of you who don't know, FUD is a shorthand for #[a(href='https://en.wikipedia.org/wiki/Fear,_uncertainty_and_doubt' target='_blank') Fear, Uncertainty and Doubt]. It's used a lot in the crypto space to point out that someone is spreading information that's negative or harmful for a company or those trading a certain coin. While FUD can be true information used in a negative light, more often than not it's false information that needs to be debunked over and over. This is some common FUD you may see in the MCO community. #[em Consider these an ongoing work-in-progress.]
+
+			.fuds
+				div.fud-question(v-for="fud in fuds")
+					.question {{fud.question}}
+					.answer(v-html='fud.answer')
+</template>
 
 <script>
 // Partials

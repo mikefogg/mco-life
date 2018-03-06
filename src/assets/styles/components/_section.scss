@@ -10,16 +10,14 @@
 		display: flex;
 		flex-direction: column;
 		min-width: 0;
-		height: calc(100vh - 51px); // 51px – Disclaimer height
-		min-height: 600px;
+		min-height: calc(100vh - 51px); // 51px – Disclaimer height
+		padding: 0;
 		background-color: $brand-blue;
-		background-size: cover;
+		background-image: url('./assets/images/pattern.svg');
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
-		background-image: url('./assets/images/pattern.svg');
+		background-size: cover;
 		text-align: center;
-		padding-top: 30px;
-		padding-bottom: 30px;
 
 		.nav-area {
 			flex: 0 0 auto;
@@ -27,29 +25,76 @@
 		}
 
 		.header-text-container {
-			flex: 1 1 auto;
-			min-width: 0;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			flex: 1 1 auto;
+			min-width: 0;
 
-			&.bold {
+			.left-area {
+				flex: 1;
+				text-align: left;
+
 				h1 {
-					margin-bottom: 0;
-					padding: 0 20px;
-					border-bottom: 0;
+					margin: 0 30px 10px;
+					padding: 0;
 					color: #fff;
-					font-size: 160px;
-					line-height: 1;
+					font: $font-weight-base 52px/60px $font-family-base;
+					text-align: left;
 				}
 
 				h2 {
-					margin-bottom: 0;
-					border-bottom: 0;
-					color: #fff;
-					font-size: 24px;
-					text-align: center;
+					margin: 0 30px 60px;
+					padding: 0;
+					border: 0;
+					color: rgba(#fff, 0.6);
+					font: $font-weight-base 22px/28px $font-family-base;
+					text-align: left;
+
+					a {
+						color: rgba(#fff, 0.6);
+					}
 				}
+			}
+
+			.right-area {
+				flex: 1;
+				margin-right: 30px;
+				margin-bottom: 30px;
+
+				.block {
+					margin-bottom: 20px;
+					padding: 30px;
+					background: rgba(#fff, 0.15);
+					border-radius: 3px;
+
+					&:last-child {
+						margin-bottom: 0;
+					}
+				}
+
+				p {
+					margin: 0;
+				}
+			}
+
+			&.bold {
+				// h1 {
+				// 	margin-bottom: 0;
+				// 	padding: 0 20px;
+				// 	border-bottom: 0;
+				// 	color: #fff;
+				// 	font-size: 160px;
+				// 	line-height: 1;
+				// }
+				//
+				// h2 {
+				// 	margin-bottom: 0;
+				// 	border-bottom: 0;
+				// 	color: #fff;
+				// 	font-size: 24px;
+				// 	text-align: center;
+				// }
 
 				h3 {
 					margin-top: 20px;
@@ -65,8 +110,8 @@
 
 	.inner-content {
 		max-width: 1200px;
-		margin-left: auto;
 		margin-right: auto;
+		margin-left: auto;
 	}
 }
 
@@ -126,9 +171,6 @@
 			h1 {
 				line-height: 1.5;
 				padding-bottom: 40px;
-			}
-			.nav-area {
-				margin-bottom: 40px;
 			}
 	}
 }

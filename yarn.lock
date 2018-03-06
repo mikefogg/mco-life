@@ -3223,6 +3223,12 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
+flipclock-es6@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/flipclock-es6/-/flipclock-es6-0.8.3.tgz#5255ce77aade4881cacc566e3c628b4dc091f5d6"
+  dependencies:
+    jquery ">=1.7"
+
 flush-write-stream@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-1.0.2.tgz#c81b90d8746766f1a609a46809946c45dd8ae417"
@@ -4655,13 +4661,9 @@ jpeg-js@0.2.0, jpeg-js@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.2.0.tgz#53e448ec9d263e683266467e9442d2c5a2ef5482"
 
-jquery@>=1.2.3:
+jquery@>=1.2.3, jquery@>=1.7, jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-
-jquery@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.0"
@@ -6932,7 +6934,7 @@ react-toggle-button@^2.1.0:
     prop-types "^15.6.0"
     react-motion "^0.5.2"
 
-"react-twentytwenty@github:garris/react-twentytwenty":
+react-twentytwenty@garris/react-twentytwenty:
   version "1.0.4"
   resolved "https://codeload.github.com/garris/react-twentytwenty/tar.gz/a8d032881e8a2f4a5af805531cc648d90487fab4"
   dependencies:

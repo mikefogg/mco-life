@@ -1,8 +1,50 @@
-<template src='./registrations.pug' lang='pug'></template>
+<template lang='pug'>
+.registrations-page
+	.section.hero
+		navigation
+
+		.header-text-container.bold.split
+			.left-area
+				h1 An unofficial website built & maintained by #[i (and for)] the Monaco community
+				h2 If you’re looking for the official Monaco website, please visit #[a(href='https://mona.co' target='_blank') https://mona.co]
+			.right-area
+				.block
+					p.block-title #[strong Countdown to Money2020]
+					Flipclock
+
+				.block
+					.loading-indicator(v-if='!loaded')
+						div.spinner-white
+							div
+							div
+							div
+					transition(name='fade')
+						.slow-loader(v-if='loaded')
+							p.block-title #[strong Total Card Reservations]
+							p.reserved-count #[strong {{formatNumeral(reservations.total)}}]
+							p.updated-at Updated {{updatedAt}}
+
+	.section.chart
+		.inner-content
+			h2 Registrations Per Day
+
+			.loading-indicator(v-if='!loaded')
+				div.spinner-ruby
+					div
+					div
+					div
+
+			transition(name='fade')
+				.slow-loader(v-if='loaded')
+
+					.chart-container
+						canvas#chart(width="800" height="600")
+</template>
 
 <script>
 // Partials
 import Navigation from '@/components/elements/partials/navigation'
+import Flipclock from '@/components/elements/flipclock'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
@@ -135,7 +177,8 @@ export default {
 		},
 	},
 	components: {
-		'navigation': Navigation
+		'navigation': Navigation,
+		Flipclock
 	},
 	created() {
 	},
@@ -217,6 +260,21 @@ export default {
 	text-align: center;
 }
 
+.block-title {
+	color: #fff;
+	font: $font-weight-base 18px/26px $font-family-base;
+}
+
+.reserved-count {
+	color: #fff;
+	font: $font-weight-bold 92px/100px $font-family-base;
+}
+
+.updated-at {
+	color: rgba(#fff, 0.6);
+	font: $font-weight-base 14px/26px $font-family-base;
+}
+
 //
 // Chart
 //
@@ -232,9 +290,33 @@ export default {
 	}
 }
 
+//
+// Responsive
+//
+
 @media (min-width: 0px) and (max-width: 800px) {
 	.chart-container {
 		height: 600px;
+	}
+}
+
+@media (min-width: 0px) and (max-width: 1400px) {
+	.section.hero .header-text-container {
+		flex-direction: column;
+
+		.left-area {
+			padding: 60px 0 0;
+			h1,
+			h2 {
+				text-align: center;
+			}
+		}
+
+		.right-area {
+			width: 100%;
+			margin: 0 auto;
+			padding: 0 40px 40px;
+		}
 	}
 }
 </style>
