@@ -8,9 +8,6 @@
 				h1 An unofficial website built & maintained by #[i (and for)] the Monaco community
 				h2 If you’re looking for the official Monaco website, please visit #[a(href='https://mona.co' target='_blank') https://mona.co]
 			.right-area
-				.block
-					p.block-title #[strong Countdown to Money2020]
-					Flipclock
 
 				.block
 					.loading-indicator(v-if='!loaded')
