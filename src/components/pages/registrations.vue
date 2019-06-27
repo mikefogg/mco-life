@@ -6,7 +6,7 @@
 		.header-text-container.bold.split
 			.left-area
 				h1 An unofficial website built & maintained by #[i (and for)] the Crypto.com community
-				h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') https://crypto.com]
+				h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') crypto.com]
 			.right-area
 
 				.block
@@ -159,4 +159,24 @@ export default {
 	font: $font-weight-base 14px/26px $font-family-base;
 }
 
+//
+// MOBILE RESPONSIVE
+//
+
+@media only screen and (max-width: 1025px) {
+	.block-title {
+		color: #fff;
+		font: $font-weight-base 16px/28px $font-family-base;
+	}
+
+	.reserved-count {
+		color: #fff;
+		font: $font-weight-bold 42px/54px $font-family-base;
+	}
+
+	.updated-at {
+		color: rgba(#fff, 0.6);
+		font: $font-weight-base 12px/24px $font-family-base;
+	}
+}
 </style>

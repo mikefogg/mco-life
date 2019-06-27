@@ -35,10 +35,14 @@
 //
 // MEDIA QUERY
 // ==========================================================================
-@media (min-width: 0px) and (max-width: 600px) {
+@media only screen and (max-width: 1025px) {
   .donations {
     padding-left: 20px;
     padding-right: 20px;
+
+		.label {
+			font-size: 14px;
+		}
   }
 
   ul.methods {
@@ -54,18 +58,6 @@
       display: block;
       margin-right: 0;
       margin-bottom: 6px;
-    }
-  }
-}
-@media (min-width: 0px) and (max-width: 400px) {
-  .donations {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  ul.methods {
-    li {
-      font-size: 12px;
     }
   }
 }
