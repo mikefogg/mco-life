@@ -4,18 +4,10 @@
 			| This is an
 			strong UNOFFICIAL
 			| website built to share information around the MCO token. Visit
-			a(href='https://mona.co' target='_blank') https://mona.co
+			a(href='https://crypto.com' target='_blank') https://crypto.com
 			| for Official Information
 		router-view
 		.footer
-			.official-links
-				a(href='#')
-			.contact
-				.label
-					| Stay tuned for updates!
-				ul.buttons
-					li: a.twitter(href='https://twitter.com/mcolife' target='_blank') Follow on Twitter
-
 			.donations
 				.label
 					| As always, donations are always appreciated to help keep the servers running
@@ -31,11 +23,9 @@
 				| Built with
 				span 100% Pure Believe
 				| from
-				span Boston.
-				| Find me on slack
+				span Austin, TX.
+				| Find me on the Crypto.com Discord
 				strong @mikef
-				| or
-				strong: a(href='mailto:mcolife@mikefogg.co') shoot me an email
 </template>
 
 <script>
