@@ -5,8 +5,8 @@
 
 		.header-text-container.bold.split
 			.left-area
-				h1 An unofficial website built & maintained by #[i (and for)] the Monaco community
-				h2 If you’re looking for the official Monaco website, please visit #[a(href='https://mona.co' target='_blank') https://mona.co]
+				h1 An unofficial website built & maintained by #[i (and for)] the Crypto.com community
+				h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') https://crypto.com]
 			.right-area
 
 				.block
@@ -20,22 +20,6 @@
 							p.block-title #[strong Total Card Reservations]
 							p.reserved-count #[strong {{formatNumeral(reservations.total)}}]
 							p.updated-at Updated {{updatedAt}}
-
-	.section.chart
-		.inner-content
-			h2 Registrations Per Day
-
-			.loading-indicator(v-if='!loaded')
-				div.spinner-ruby
-					div
-					div
-					div
-
-			transition(name='fade')
-				.slow-loader(v-if='loaded')
-
-					.chart-container
-						canvas#chart(width="800" height="600")
 </template>
 
 <script>
@@ -46,11 +30,11 @@ import Flipclock from '@/components/elements/flipclock'
 import _ from 'lodash'
 import numeral from 'numeral'
 import moment from 'moment'
-import Chart from 'chart.js'
 import $ from 'jquery'
 
 export default {
 	name: 'RegistrationsPage',
+
 	data () {
 		return {
 			loaded: false,
@@ -71,6 +55,7 @@ export default {
 			daily: null
 		}
 	},
+
 	computed: {
 		apiResponse: function() {
 			return this.$store.state.apiResponse
@@ -78,125 +63,19 @@ export default {
 
 		updatedAt: function() {
 			return this.reservations.timestamp ? moment(this.reservations.timestamp).calendar() : null
-		},
-
-		chartData: function() {
-			// Get the datasets
-			const reservationData = _.map(this.daily, 'reservations')
-			const reservationLabels = _.map(this.daily, (day) => moment(day.date).format('MMM Do, YYYY'))
-			const priceData = _.map(this.daily, (day) => day.price_usd.toFixed(2))
-			const priceLabels = _.map(this.daily, (day) => moment(day.date).format('MMMM Do, YYYY'))
-
-			return {
-				type: 'line',
-				data: {
-					labels: reservationLabels,
-					datasets: [{
-						label: 'Daily Reservations',
-						yAxisID: 'y-axis-0',
-						data: reservationData,
-						// Point
-						pointBorderColor: 'rgba(37, 105, 149, 1.0)',
-						pointBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-						pointHoverBackgroundColor: 'rgba(37, 105, 149, 1.0)',
-						pointHoverBorderColor: 'rgba(37, 105, 149, 1.0)',
-						pointBorderWidth: 6,
-						pointHoverRadius: 8,
-						pointHoverBorderWidth: 1,
-						pointRadius: 3,
-						// Background
-						backgroundColor: [
-							'rgba(37, 105, 149, 0.2)',
-						],
-						// Border
-						borderColor: [
-							'rgba(37, 105, 149, 1.0)',
-						],
-						borderWidth: 2
-					}, {
-						label: 'Price (USD)',
-						yAxisID: 'y-axis-1',
-						data: priceData,
-						// Point
-						pointBorderColor: 'rgba(144, 15, 36, 0.15)',
-						pointBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-						pointHoverBackgroundColor: 'rgba(144, 15, 36, 0.15)',
-						pointHoverBorderColor: 'rgba(144, 15, 36, 0.15)',
-						pointBorderWidth: 6,
-						pointHoverRadius: 8,
-						pointHoverBorderWidth: 1,
-						pointRadius: 3,
-						// Background
-						backgroundColor: [
-							'rgba(144, 15, 36, 0.05)',
-						],
-						// Border
-						borderColor: [
-							'rgba(144, 15, 36, 0.15)',
-						],
-						borderWidth: 2
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					legend: {
-						position: 'bottom'
-					},
-					scales: {
-						xAxes: [{
-							ticks: {
-								autoSkip: true
-							}
-						}],
-						yAxes: [{
-							id: 'y-axis-0',
-							position: 'left',
-							ticks: {
-								beginAtZero:true
-							},
-							gridLines: {
-								color: 'rgba(37, 105, 149, 0.1)'
-							}
-						}, {
-							id: 'y-axis-1',
-							position: 'right',
-							ticks: {
-								beginAtZero:true
-							},
-							gridLines: {
-								color: 'rgba(144, 15, 36, 0.1)'
-							}
-						}]
-					}
-				}
-			}
-		},
+		}
 	},
+
 	components: {
 		'navigation': Navigation,
 		Flipclock
 	},
-	created() {
-	},
+
 	mounted() {
 		// Load the data we need
 		this.loadData()
 	},
-	watch: {
-		loaded: function(loaded) {
-			// Set the chart up if we haven't yet!
-			if (loaded && !this.cardChart) {
-				// Wait until the next dom load
-				this.$nextTick().then(() =>{
-					// Build the chart
-					var ctx = document.getElementById('chart')
-					// Build the chart
-					this.cardChart = new Chart(ctx, this.chartData)
-				})
-			}
-		}
-	},
+
 	methods: {
 		// Go get the data from our api (or use the existing one)
 		loadData: function() {
@@ -278,31 +157,6 @@ export default {
 .updated-at {
 	color: rgba(#fff, 0.6);
 	font: $font-weight-base 14px/26px $font-family-base;
-}
-
-//
-// Chart
-//
-
-.chart-container {
-	position: relative;
-	height: 800px;
-	padding: 0px;
-	margin-top: 40px;
-
-	canvas#chart {
-		height: 100% !important;
-	}
-}
-
-//
-// Responsive
-//
-
-@media (min-width: 0px) and (max-width: 800px) {
-	.chart-container {
-		height: 600px;
-	}
 }
 
 </style>
