@@ -61,12 +61,16 @@ ul {
 }
 
 //
-// Responsive
+// MOBILE RESPONSIVE
 //
 
-@media (min-width: 0px) and (max-width: 600px) {
-	ul li {
-		display: block;
+@media only screen and (max-width: 1025px) {
+	.navigation {
+		display: none;
+	}
+
+	.logo {
+		margin: 0 auto;
 	}
 }
 </style>

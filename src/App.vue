@@ -4,8 +4,8 @@
 			| This is an
 			strong UNOFFICIAL
 			| website built to share information around the MCO token. Visit
-			a(href='https://crypto.com' target='_blank') https://crypto.com
-			| for Official Information
+			a(href='https://crypto.com' target='_blank') crypto.com
+			| for Official Information.
 		router-view
 		.footer
 			.donations

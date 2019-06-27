@@ -4,8 +4,8 @@ An UNOFFICIAL website built using [Vue.js](http://vuejs.org) for the MCO communi
 
 ## Requirements
 
-1. [Node.js](nodejs.org) (>= 8.9.4) - This can be installed using `$ nvm install`
-2. [Yarn](https://yarnpkg.com) (>= 1.13.0) - This can be installed using `brew install yarn --without-node`
+1. [Node.js](nodejs.org) (8.9.4) - This can be installed using `$ nvm install`
+2. [Yarn](https://yarnpkg.com) (1.13.0) - This can be installed using `brew install yarn --without-node`
 
 ## Build Setup
 
