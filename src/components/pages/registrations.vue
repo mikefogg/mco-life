@@ -179,5 +179,4 @@ export default {
 		font: $font-weight-base 12px/24px $font-family-base;
 	}
 }
-
 </style>
