@@ -54,7 +54,7 @@ Lastly, we store the variables (currently only colors) in the `/src/assets/style
 
 Ooooh where to begin.
 
-1. Live updating of the reservation counter (_Coming Soon_)
+1. Live updating of the reservation counter
 1. Make it possible to link to each FUD Response
 1. Finish allowing a specific set of annual reservations (vs continuous growth)
 1. Move some of the repeated code into helpers, i hate that

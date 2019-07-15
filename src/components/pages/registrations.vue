@@ -6,20 +6,22 @@
 		.header-text-container.bold.split
 			.left-area
 				h1 An unofficial website built & maintained by #[i (and for)] the Crypto.com community
-				h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') crypto.com]
-			.right-area
+				//- h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') crypto.com]
+				h2(v-if='loaded') There are currently #[strong {{formatNumeral(reservations.total)}}] card reservations!
+				h3(v-if='loaded') Last Updated {{updatedAt}}
 
-				.block
-					.loading-indicator(v-if='!loaded')
-						div.spinner-white
-							div
-							div
-							div
-					transition(name='fade')
-						.slow-loader(v-if='loaded')
-							p.block-title #[strong Total Card Reservations]
-							p.reserved-count #[strong {{formatNumeral(reservations.total)}}]
-							p.updated-at Updated {{updatedAt}}
+			.loading-indicator(v-if='!loaded')
+				div.spinner-white
+					div
+					div
+					div
+			transition(name='fade')
+				.right-area(v-if='loaded')
+					.chart-label Daily New Card Reservations
+					.custom-chart
+						.row(v-for='result in dailyResults')
+							.bar(:style="{ 'height': `${result.percent}%`,  'top': `${result.margin}%`, 'opacity': result.opacity }")
+								.count {{result.count}} #[span.date {{result.timestamp}}]
 </template>
 
 <script>
@@ -63,6 +65,26 @@ export default {
 
 		updatedAt: function() {
 			return this.reservations.timestamp ? moment(this.reservations.timestamp).calendar() : null
+		},
+
+		dailyResults: function() {
+			const daily = _.take(_.reverse(this.daily), 14)
+			if (_.isEmpty(daily)) { return }
+
+			const max = _.max(daily.map(val => val.reservations))
+			const count = _.size(daily)
+
+			return _.map(_.reverse(daily), (val, index) => {
+				const top = ((val.reservations / max) * 100)
+
+				return {
+					count: val.reservations,
+					percent: top,
+					margin: 100 - top,
+					opacity: 0.1 + (index / count),
+					timestamp: moment(val.date).format('MM/DD')
+				}
+			})
 		}
 	},
 
@@ -138,10 +160,6 @@ export default {
 
 .section.hero {
 	height: auto;
-
-	.header-text-container {
-		display: block;
-	}
 }
 
 .block-title {
@@ -157,6 +175,74 @@ export default {
 .updated-at {
 	color: rgba(#fff, 0.6);
 	font: $font-weight-base 14px/26px $font-family-base;
+}
+
+/* Grid */
+
+.right-area {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding-top: 20px;
+}
+
+.chart-label {
+	position: absolute;
+	top: -8px;
+	width: 200px;
+	left: 50%;
+	margin-left: -100px;
+	height: 30px;
+	border-radius: 4px 4px 0 0;
+	font: $font-weight-base 14px/32px $font-family-base;
+	background: $brand-blue;
+	color: rgba(#fff, 0.5);
+	border: 2px solid rgba(#fff, 0.5);
+	border-bottom: 0;
+	z-index: 2;
+}
+
+.custom-chart {
+	position: relative;
+	background: $brand-blue;
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+	padding-top: 40px;
+	border-top: 2px solid rgba(#fff, 0.5);
+
+	.row {
+		position: relative;
+		flex: 1;
+
+		&:not(:first-of-type) {
+			margin-left: 20px;
+		}
+
+		.bar {
+			width: 100%;
+			position: absolute;
+			background: #fff;
+			opacity: 0.65;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			.count {
+				color: $brand-blue;
+				padding-top: 10px;
+				font-weight: bold;
+				font: $font-weight-bold 14px/16px $font-family-base;
+
+				span.date {
+					display: block;
+					font-size: 10px;
+					font-weight: $font-weight-base;
+				}
+			}
+		}
+	}
 }
 
 //
@@ -177,6 +263,16 @@ export default {
 	.updated-at {
 		color: rgba(#fff, 0.6);
 		font: $font-weight-base 12px/24px $font-family-base;
+	}
+
+	.custom-chart .row {
+		&:nth-child(11) {
+			margin-left: 0;
+		}
+
+		&:nth-child(-n+10) {
+			display: none;
+		}
 	}
 }
 </style>
