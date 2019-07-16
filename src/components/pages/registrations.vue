@@ -20,7 +20,7 @@
 					.chart-label Daily New Card Reservations
 					.custom-chart
 						.row(v-for='result in dailyResults')
-							.bar(:style="{ 'height': `${result.percent}%`,  'top': `${result.margin}%`, 'opacity': result.opacity }")
+							.bar(:class='result.className' :style="{ 'height': `${result.percent}%`,  'top': `${result.margin}%`, 'opacity': result.opacity }")
 								.count {{result.count}} #[span.date {{result.timestamp}}]
 </template>
 
@@ -68,7 +68,15 @@ export default {
 		},
 
 		dailyResults: function() {
-			const daily = _.take(_.reverse(this.daily), 14)
+			const reservations = this.reservations
+			const today = {
+				reservations: reservations.today,
+				date: reservations.timestamp,
+				today: true
+			}
+			const days = _.take(_.reverse(this.daily), 13)
+			// Add today as the last item
+			const daily = [today, ...days]
 			if (_.isEmpty(daily)) { return }
 
 			const max = _.max(daily.map(val => val.reservations))
@@ -77,13 +85,24 @@ export default {
 			return _.map(_.reverse(daily), (val, index) => {
 				const top = ((val.reservations / max) * 100)
 
-				return {
+				let newDay = {
 					count: val.reservations,
 					percent: top,
 					margin: 100 - top,
 					opacity: 0.1 + (index / count),
 					timestamp: moment(val.date).format('MM/DD')
 				}
+
+				// Update todays value
+				if (val.today) {
+					newDay = {
+						...newDay,
+						timestamp: 'Today',
+						className: 'today'
+					}
+				}
+
+				return newDay
 			})
 		}
 	},
@@ -214,9 +233,10 @@ export default {
 	.row {
 		position: relative;
 		flex: 1;
+		margin-left: 20px;
 
-		&:not(:first-of-type) {
-			margin-left: 20px;
+		&:last-of-type {
+			margin-right: 20px;
 		}
 
 		.bar {
@@ -224,6 +244,16 @@ export default {
 			position: absolute;
 			background: #fff;
 			opacity: 0.65;
+
+			&.today {
+				background: transparent;
+				border: 2px solid rgba(#fff, 0.25);
+				border-bottom: none;
+
+				.count {
+					color: #fff;
+				}
+			}
 
 			&:hover {
 				opacity: 1;
