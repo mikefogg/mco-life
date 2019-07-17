@@ -7,27 +7,13 @@
 			.left-area
 				h1 An unofficial website built & maintained by #[i (and for)] the Crypto.com community
 				//- h2 If you’re looking for the official Crypto.com website, please visit #[a(href='https://crypto.com' target='_blank') crypto.com]
-				h2(v-if='loaded') There are currently #[strong {{formatNumeral(reservations.total)}}] card reservations!
-				h3(v-if='loaded') Last Updated {{updatedAt}}
-
-			.loading-indicator(v-if='!loaded')
-				div.spinner-white
-					div
-					div
-					div
-			transition(name='fade')
-				.right-area(v-if='loaded')
-					.chart-label Daily New Card Reservations
-					.custom-chart
-						.row(v-for='result in dailyResults')
-							.bar(:class='result.className' :style="{ 'height': `${result.percent}%`,  'top': `${result.margin}%`, 'opacity': result.opacity }")
-								.count {{result.count}} #[span.date {{result.timestamp}}]
+				h2 The most recent (and last available &#x1F614;) reservation count was #[strong 277,210]!
+				h3 Last Recorded {{recordedAt}} with a new daily record of #[strong 10,908]
 </template>
 
 <script>
 // Partials
 import Navigation from '@/components/elements/partials/navigation'
-import Flipclock from '@/components/elements/flipclock'
 // Helpers
 import _ from 'lodash'
 import numeral from 'numeral'
@@ -59,57 +45,13 @@ export default {
 	},
 
 	computed: {
-		apiResponse: function() {
-			return this.$store.state.apiResponse
-		},
-
-		updatedAt: function() {
-			return this.reservations.timestamp ? moment(this.reservations.timestamp).calendar() : null
-		},
-
-		dailyResults: function() {
-			const reservations = this.reservations
-			const today = {
-				reservations: reservations.today,
-				date: reservations.timestamp,
-				today: true
-			}
-			const days = _.take(_.reverse(this.daily), 13)
-			// Add today as the last item
-			const daily = [today, ...days]
-			if (_.isEmpty(daily)) { return }
-
-			const max = _.max(daily.map(val => val.reservations))
-			const count = _.size(daily)
-
-			return _.map(_.reverse(daily), (val, index) => {
-				const top = ((val.reservations / max) * 100)
-
-				let newDay = {
-					count: val.reservations,
-					percent: top,
-					margin: 100 - top,
-					opacity: 0.1 + (index / count),
-					timestamp: moment(val.date).format('MM/DD')
-				}
-
-				// Update todays value
-				if (val.today) {
-					newDay = {
-						...newDay,
-						timestamp: 'Today',
-						className: 'today'
-					}
-				}
-
-				return newDay
-			})
+		recordedAt: function() {
+			return moment('Wed, 17 Jul 2019 01:21:47 EDT -04:00').calendar()
 		}
 	},
 
 	components: {
-		'navigation': Navigation,
-		Flipclock
+		'navigation': Navigation
 	},
 
 	mounted() {
@@ -118,43 +60,6 @@ export default {
 	},
 
 	methods: {
-		// Go get the data from our api (or use the existing one)
-		loadData: function() {
-			if (this.apiResponse) {
-				// We have it already! Use that
-				this.handleApiResponse(this.apiResponse)
-			} else {
-				// We need it, so now let's store and use the json response
-				$.get('https://mco-life-api.herokuapp.com/status').then(response => {
-					this.$store.commit('apiResponse', response)
-					this.handleApiResponse(this.apiResponse)
-				}).catch(error => {
-					console.log('error:', error)
-				})
-			}
-		},
-
-		// Actually handle the api response and set it
-		handleApiResponse: function(response) {
-			// Store the prices
-			this.price.availableSupply = response.price.available_supply
-			this.price.totalSupply = response.price.available_supply
-			this.price.priceBtc = response.price.price_btc
-			this.price.priceUsd = response.price.price_usd
-			this.price.rank = response.price.rank
-			this.price.timestamp = response.price.timestamp
-
-			this.reservations.timestamp = response.reservations.timestamp
-			this.reservations.today = response.reservations.today
-			this.reservations.total = response.reservations.total
-
-			// Set the daily amount
-			this.daily = response.daily
-
-			// Tell everything we're loaded
-			this.loaded = true
-		},
-
 		formatNumeral: (number) => {
 			return numeral(number).format('0,0')
 		},
